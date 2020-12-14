@@ -6,7 +6,6 @@
 //
 
 import UIKit
-import TagListView
 
 class SecondPageVC: UIViewController {
     
@@ -41,24 +40,6 @@ class SecondPageVC: UIViewController {
         return btn
     }()
     
-    let tagListView: TagListView = {
-        let v = TagListView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width-40, height: 0))
-        v.layer.cornerRadius = 15
-        v.cornerRadius = 7
-        v.tagBackgroundColor = UIColor.themeOrange
-        v.textFont = v.textFont.withSize(8)
-        v.textColor = UIColor.white
-        v.textFont = UIFont.boldSystemFont(ofSize: 20)
-        v.alignment = .center // possible values are [.leading, .trailing, .left, .center, .right]
-        v.marginY = 15
-        v.marginX = 10
-        
-//        v.safeAreaInsets = UIEdgeInsets(top: 8, left: 8, bottom: 8, right: 8)
-
-        
-        return v
-    }()
-    
     private let triggerTagView = TagView()
     // MARK: - Lifecycle
 
@@ -78,20 +59,6 @@ class SecondPageVC: UIViewController {
         view.addSubview(triggerTagView)
         triggerTagView.center(inView: view)
         triggerTagView.setDimensions(width: UIScreen.main.bounds.width - 40, height: 300)
-        
-//        tagListView.addTag("boredom at home")
-//        tagListView.addTag("saw suggestive pic somewhere")
-//        tagListView.addTag("wife yelled at me")
-//        tagListView.addTag("saw alcohol in a supermarket")
-//        tagListView.addTag("random intrusive thoughts")
-//
-//        view.addSubview(tagListView)
-//        tagListView.center(inView: view)
-        
-//        tagListView.insertTag("This should be the second tag", at: 1)
-        
-//        view.addSubview(tagListView)
-//        tagListView.center(inView: view)
         
 //        let stack = UIStackView(arrangedSubviews: [triggerCaptionLabel, triggerTextField, solutionCaptionLabel, triggerSolutionInputView])
 //        stack.axis = .vertical

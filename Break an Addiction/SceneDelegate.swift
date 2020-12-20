@@ -17,12 +17,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         guard let scene = (scene as? UIWindowScene) else { return }
         
         window = UIWindow(windowScene: scene)
-//        let introNav = UINavigationController(rootViewController: IntroVC())
-//        introNav.navigationBar.setBackgroundImage(UIImage(), for: .default)
-//        introNav.navigationBar.shadowImage = UIImage()
-//        introNav.navigationBar.isTranslucent = true
-//        introNav.view.backgroundColor = .clear
         window?.rootViewController = RootIntroPageVC()
+//        window?.rootViewController = MainTabController()
         window?.makeKeyAndVisible()
     }
 

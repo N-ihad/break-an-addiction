@@ -16,6 +16,17 @@ class Utilities {
         case normal = "hint"
     }
     
+    enum textFieldPlaceholder: String {
+        case trigger = "Enter trigger here"
+        case relapse = "Enter substitute reaction here"
+    }
+    
+    enum tagViewCaptionText: String {
+        case trigger = "Choose or add your own trigger which leads you to a relapse"
+        case solution = "Choose a healthy response to the trigger instead of a relapse"
+        case motivationalQuote = "“The resistance that you fight physically in the gym and the resistance that you fight in life can only build a strong character.” Arnold Schwarzenegger"
+    }
+    
     func button(text: String) -> UIButton {
         let btn = UIButton()
         btn.setTitle(text, for: .normal)
@@ -29,7 +40,7 @@ class Utilities {
         return btn
     }
     
-    func labelCaptionForTextField(text: String, highlightAndUnderlineSubstring: String? = nil) -> UILabel {
+    func label(text: String) -> UILabel {
         let lbl = UILabel()
         lbl.textColor = .white
         lbl.font = UIFont.boldSystemFont(ofSize: 20)
@@ -37,6 +48,18 @@ class Utilities {
         lbl.lineBreakMode = .byWordWrapping
         lbl.textAlignment = .center
         lbl.attributedText = NSMutableAttributedString(string: text, attributes: [NSAttributedString.Key.kern: -0.41])
+        
+        return lbl
+    }
+    
+    func labelCaption(text: tagViewCaptionText, highlightAndUnderlineSubstring: String? = nil) -> UILabel {
+        let lbl = UILabel()
+        lbl.textColor = .white
+        lbl.font = UIFont.boldSystemFont(ofSize: 20)
+        lbl.numberOfLines = 0
+        lbl.lineBreakMode = .byWordWrapping
+        lbl.textAlignment = .center
+        lbl.attributedText = NSMutableAttributedString(string: text.rawValue, attributes: [NSAttributedString.Key.kern: -0.41])
         if let substr = highlightAndUnderlineSubstring {
             lbl.highlightAndUnderline(searchedText: substr)
         }
@@ -44,23 +67,46 @@ class Utilities {
         return lbl
     }
     
-    func hintView(text: String, style: hintImageStyle) -> UIView {
-        let view = UIView()
+    func labelInstruction(text: String) -> UILabel {
+        let lbl = UILabel()
+        lbl.preferredMaxLayoutWidth = (UIScreen.main.bounds.width / 2) - 20
+        lbl.numberOfLines = 0
+        lbl.lineBreakMode = .byWordWrapping
+        lbl.font = UIFont.boldSystemFont(ofSize: 17)
+        lbl.textColor = .white
+        lbl.layer.cornerRadius = 6
+        lbl.layer.borderColor = UIColor.themeOrange.cgColor
+        lbl.layer.borderWidth = 2
+        lbl.setMargins()
         
-        let iv = UIImageView() // CGRect(x: 0, y: 0, width: 15, height: 25)
-        iv.image = UIImage(named: style.rawValue)
-        view.addSubview(iv)
-        iv.centerX(inView: view, topAnchor: view.topAnchor, paddingTop: 2)
+        return lbl
+    }
+    
+    func alertWithTextfields(caption: String, placeholders: [textFieldPlaceholder], completion: @escaping ([String]) -> Void) -> UIAlertController {
+        let alertController = UIAlertController(title: caption, message: "", preferredStyle: UIAlertController.Style.alert)
         
-        let hintLabel = UILabel()
-        hintLabel.font = UIFont.boldSystemFont(ofSize: 9)
-        hintLabel.text = text
-        view.addSubview(hintLabel)
-        hintLabel.centerX(inView: view, topAnchor: iv.bottomAnchor, paddingTop: 3)
+        for placeholder in placeholders {
+            alertController.addTextField { (textField : UITextField!) -> Void in
+                textField.placeholder = placeholder.rawValue
+            }
+        }
         
-        view.setDimensions(width: hintLabel.intrinsicContentSize.width, height: 40)
+        let saveAction = UIAlertAction(title: "Save", style: UIAlertAction.Style.default) { alert -> Void in
+            var textFieldsValues = [String]()
+            for i in 0..<placeholders.count {
+                textFieldsValues.append((alertController.textFields![i] as UITextField).text ?? "")
+            }
+//            let triggerTF = alertController.textFields![0] as UITextField
+//            let solutionTF = alertController.textFields![1] as UITextField
+            
+            completion(textFieldsValues)
+        }
+        let cancelAction = UIAlertAction(title: "Cancel", style: UIAlertAction.Style.cancel, handler: { (action : UIAlertAction!) -> Void in })
         
-        return view
+        alertController.addAction(saveAction)
+        alertController.addAction(cancelAction)
+        
+        return alertController
     }
 }
 

@@ -11,7 +11,7 @@ class FirstPageVC: UIViewController {
     
     // MARK: - Properties
     private let motivationLabel: UILabel = {
-        let lbl = Utilities().labelCaptionForTextField(text: "“The resistance that you fight physically in the gym and the resistance that you fight in life can only build a strong character.” Arnold Schwarzenegger")
+        let lbl = Utilities().labelCaption(text: .motivationalQuote)
         
         return lbl
     }()
@@ -34,6 +34,7 @@ class FirstPageVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        configureSubviews()
         configureUI()
     }
 
@@ -46,9 +47,7 @@ class FirstPageVC: UIViewController {
     
     // MARK: - Helpers
     
-    func configureUI() {
-        view.backgroundColor = .themeDarkGreen
-        
+    func configureSubviews() {
         let stack = UIStackView(arrangedSubviews: [motivationLabel, habitNameTextField])
         stack.axis = .vertical
         stack.spacing = 20
@@ -58,7 +57,10 @@ class FirstPageVC: UIViewController {
         view.addSubview(nextButton)
         stack.anchor(top: view.topAnchor, left: view.leftAnchor, right: view.rightAnchor, paddingTop: 178, paddingLeft: 32, paddingRight: 32)
         nextButton.centerX(inView: view, topAnchor: stack.bottomAnchor, paddingTop: 28)
-
+    }
+    
+    func configureUI() {
+        view.backgroundColor = .themeDarkGreen
     }
 }
 

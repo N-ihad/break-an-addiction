@@ -8,18 +8,23 @@
 import UIKit
 
 class TagCell: UICollectionViewCell {
+    
     // MARK: - Properties
+    
     let titleLabel: UILabel = {
-        let lbl = UILabel()
-        lbl.textColor = .white
-        lbl.font = UIFont.boldSystemFont(ofSize: 16)
+        let label = UILabel()
+        label.textColor = .white
+        label.font = UIFont.boldSystemFont(ofSize: 16)
         
-        return lbl
+        return label
     }()
     
     override var isSelected: Bool {
         didSet {
             contentView.backgroundColor = isSelected ? .themeOrange : .clear
+//            if isSelected {
+//                print(titleLabel.text!)
+//            }
 //            titleLabel.textColor = isSelected ? .black : .white
         }
     }
@@ -39,7 +44,7 @@ class TagCell: UICollectionViewCell {
     
     // MARK: - Selectors
     @objc func tagCellTapped() {
-        print("DEBUG: \(isSelected)")
+        print("DEBUG: tagCellTapped")
     }
     
     // MARK: - Helpers
@@ -56,10 +61,12 @@ class TagCell: UICollectionViewCell {
         layer.cornerRadius = 6
         layer.borderColor = UIColor.themeOrange.cgColor
         layer.borderWidth = 2
+        clipsToBounds = true
+        
     }
     
     func configureSubviews() {
         contentView.addSubview(titleLabel)
-        titleLabel.center(inView: self)
+        titleLabel.centerY(inView: contentView, leftAnchor: contentView.leftAnchor, paddingLeft: 9)
     }
 }

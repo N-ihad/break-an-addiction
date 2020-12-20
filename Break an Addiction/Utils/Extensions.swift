@@ -158,7 +158,7 @@ extension UIColor {
 extension UILabel {
 
     func highlightAndUnderline(searchedText: String, color: UIColor = .themeOrange) {
-        guard let txtLabel = self.text?.lowercased() else {return}
+        guard let txtLabel = self.text else {return}
         let attributeTxt = NSMutableAttributedString(string: txtLabel)
         let range: NSRange = attributeTxt.mutableString.range(of: searchedText.lowercased(), options: .caseInsensitive)
 
@@ -168,4 +168,88 @@ extension UILabel {
         self.attributedText = attributeTxt
     }
 
+    func setMargins(margin: CGFloat = 10) {
+        if let textString = self.text {
+            let paragraphStyle = NSMutableParagraphStyle()
+            paragraphStyle.firstLineHeadIndent = margin
+            paragraphStyle.headIndent = margin
+            paragraphStyle.tailIndent = -margin
+            let attributedString = NSMutableAttributedString(string: textString)
+            attributedString.addAttribute(.paragraphStyle, value: paragraphStyle, range: NSRange(location: 0, length: attributedString.length))
+            attributedText = attributedString
+        }
+    }
+    
+    func heightBasedOnText(text: String, font: UIFont, width: CGFloat) -> CGFloat{
+        let label = UILabel(frame: CGRect(x: 0, y: 0, width: width, height: CGFloat.greatestFiniteMagnitude))
+        label.numberOfLines = 0
+        label.lineBreakMode = NSLineBreakMode.byWordWrapping
+        label.font = font
+        label.text = text
+
+        label.sizeToFit()
+        return label.frame.height
+   }
+}
+
+
+// MARK: - String
+
+extension String {
+    func height(withConstrainedWidth width: CGFloat, font: UIFont) -> CGFloat {
+        let constraintRect = CGSize(width: width, height: .greatestFiniteMagnitude)
+        let boundingBox = self.boundingRect(with: constraintRect, options: .usesLineFragmentOrigin, attributes: [NSAttributedString.Key.font: font], context: nil)
+
+        return ceil(boundingBox.height)
+    }
+
+    func width(withConstrainedHeight height: CGFloat, font: UIFont) -> CGFloat {
+        let constraintRect = CGSize(width: .greatestFiniteMagnitude, height: height)
+        let boundingBox = self.boundingRect(with: constraintRect, options: .usesLineFragmentOrigin, attributes: [NSAttributedString.Key.font: font], context: nil)
+
+        return ceil(boundingBox.width)
+    }
+}
+
+// MARK: - UIButton
+
+extension UIButton {
+    func setImageWithSize(size: CGFloat, imgName: String) {
+        let largeConfig = UIImage.SymbolConfiguration(pointSize: size, weight: .bold, scale: .large)
+        let img = UIImage(systemName: imgName, withConfiguration: largeConfig)
+        
+        self.setImage(img, for: .normal)
+    }
+}
+
+
+// MARK: - Date
+
+extension Date {
+    static var yesterday: Date { return Date().dayBefore }
+    static var tomorrow:  Date { return Date().dayAfter }
+    var dayBefore: Date {
+        return Calendar.current.date(byAdding: .day, value: -1, to: noon)!
+    }
+    var dayAfter: Date {
+        return Calendar.current.date(byAdding: .day, value: 1, to: noon)!
+    }
+    var noon: Date {
+        return Calendar.current.date(bySettingHour: 12, minute: 0, second: 0, of: self)!
+    }
+    var month: Int {
+        return Calendar.current.component(.month,  from: self)
+    }
+    var isLastDayOfMonth: Bool {
+        return dayAfter.month != month
+    }
+    
+    var toString: String {
+        let formatter = DateFormatter()
+        formatter.timeZone = TimeZone.current
+        formatter.dateFormat = "yyyy-MM-dd HH:mm"
+        let relapseDateInString = formatter.string(from: self)
+        
+        return relapseDateInString
+    }
 }

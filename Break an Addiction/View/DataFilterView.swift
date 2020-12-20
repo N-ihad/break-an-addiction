@@ -1,5 +1,5 @@
 //
-//  TriggerTagView.swift
+//  DataFilterView.swift
 //  Break an Addiction
 //
 //  Created by Nihad on 12/14/20.
@@ -7,15 +7,17 @@
 
 import UIKit
 
-private let reuseIdentifier = "TagCell"
+private let reuseIdentifier = "DataCell"
 
-protocol TagViewProtocol {
-    var name: String { get set }
+protocol DataFilterViewDelegate: class {
+    func filterView(_ view: DataFilterView, didSelect indexPath: IndexPath)
 }
 
-class TagView: UIView {
+class DataFilterView: UIView {
     
     // MARK: - Properties
+    
+    weak var delegate: DataFilterViewDelegate?
     
     lazy var collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
@@ -24,21 +26,17 @@ class TagView: UIView {
         collectionView.delegate = self
         collectionView.dataSource = self
         
+        
         return collectionView
     }()
     
-    var data = [TagViewProtocol]()
-    
     // MARK: - Lifecycle
     
-    init(frame: CGRect, initializeWith data: [TagViewProtocol]) {
+    override init(frame: CGRect) {
         super.init(frame: frame)
         
-        self.heightAnchor.constraint(equalToConstant: 170).isActive = true
-        self.data = data
-        
+        configureUI()
         configureCollectionView()
-        configureSubviews()
     }
     
     required init?(coder: NSCoder) {
@@ -47,51 +45,51 @@ class TagView: UIView {
     
     // MARK: - Helpers
     
-    func configureCollectionView() {
-        collectionView.register(TagCell.self, forCellWithReuseIdentifier: reuseIdentifier)
-        collectionView.indicatorStyle = UIScrollView.IndicatorStyle.white
+    func configureUI() {
+        configureSubviews()
     }
     
     func configureSubviews() {
         addSubview(collectionView)
         collectionView.pinTo(self)
     }
+    
+    func configureCollectionView() {
+        collectionView.register(FilteredDataCell.self, forCellWithReuseIdentifier: reuseIdentifier)
+        
+        let selectedIndexPath = IndexPath(row: 0, section: 0)
+        collectionView.selectItem(at: selectedIndexPath, animated: true, scrollPosition: .left)
+    }
 }
 
-
-extension TagView: UICollectionViewDataSource {
+extension DataFilterView: UICollectionViewDataSource {
+    
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return data.count
+        2
     }
-
+    
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath) as! TagCell
-        
-        cell.titleLabel.text = data[indexPath.row].name
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath) as! FilteredDataCell
+        cell.titleLabel.text = indexPath.row == 0 ? "Relapses" : "Triggers"
         
         return cell
     }
 }
 
-extension TagView: UICollectionViewDelegateFlowLayout {
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let item = data[indexPath.row].name
-        var itemSize = item.size(withAttributes: [
-            NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 16)
-        ])
-        if itemSize.width > self.frame.width - 20 {
-            itemSize.width = self.frame.width - 20
-        }
-        return CGSize(width: itemSize.width + 18, height: itemSize.height + 6)
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
-        return 5
+extension DataFilterView: UICollectionViewDelegate {
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        delegate?.filterView(self, didSelect: indexPath)
     }
 }
 
-extension TagView: UICollectionViewDelegate {
+extension DataFilterView: UICollectionViewDelegateFlowLayout {
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        return CGSize(width: frame.width / 2, height: frame.height)
+    }
     
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
+        return 0
+    }
 }
 
 

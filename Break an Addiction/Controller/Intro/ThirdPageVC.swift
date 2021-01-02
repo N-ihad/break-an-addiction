@@ -7,6 +7,8 @@
 
 import UIKit
 
+private let reuseIdentifier = "TagCell"
+
 class ThirdPageVC: UIViewController {
     
     // MARK: - Properties
@@ -26,7 +28,7 @@ class ThirdPageVC: UIViewController {
         return btn
     }()
     
-    private let solutionsTagView = TagView(frame: .zero, initializeWith: AddictionService.shared.getReactions())
+    private let reactionsTagView = TagView(frame: .zero)
     
     private let finishButton: UIButton = {
         let btn = Utilities().button(text: "Finish")
@@ -40,6 +42,7 @@ class ThirdPageVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        configureTagView()
         configureSubviews()
         configureUI()
     }
@@ -47,21 +50,21 @@ class ThirdPageVC: UIViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(true)
         
-        solutionsTagView.collectionView.flashScrollIndicators()
+        reactionsTagView.collectionView.flashScrollIndicators()
     }
 
     // MARK: - Selectors
     
     @objc func addReactionButtonPressed() {
-        let alertController = Utilities().alertWithTextfields(caption: "Add new trigger", placeholders: [.trigger], completion: { [weak self] values in
+        let alertController = Utilities().alertWithTextfields(caption: "Add new reaction", placeholders: [.relapse], completion: { [weak self] values in
             do {
                 try AddictionService.shared.addReaction(name: values[0])
-            } catch let error {
-                let alert = UIAlertController(title: "Error", message: error.localizedDescription, preferredStyle: UIAlertController.Style.alert)
-                alert.addAction(UIAlertAction(title: "OK", style: UIAlertAction.Style.default, handler: nil))
+            } catch {
+                let error = error as! LocalizedDescriptionError
+                let alert = Utilities().alertError(message: error.localizedDescription)
                 self?.present(alert, animated: true, completion: nil)
             }
-            self?.solutionsTagView.collectionView.reloadData()
+            self?.reactionsTagView.collectionView.reloadData()
         })
         present(alertController, animated: true, completion: nil)
     }
@@ -74,8 +77,14 @@ class ThirdPageVC: UIViewController {
     
     // MARK: - Helpers
     
+    func configureTagView() {
+        reactionsTagView.collectionView.delegate = self
+        reactionsTagView.collectionView.dataSource = self
+        reactionsTagView.collectionView.register(TagCell.self, forCellWithReuseIdentifier: reuseIdentifier)
+    }
+    
     func configureSubviews() {
-        let stack = UIStackView(arrangedSubviews: [solutionsTagCaptionLabel, solutionsTagView])
+        let stack = UIStackView(arrangedSubviews: [solutionsTagCaptionLabel, reactionsTagView])
         stack.axis = .vertical
         stack.spacing = 30
         stack.distribution = .equalCentering
@@ -92,5 +101,48 @@ class ThirdPageVC: UIViewController {
     func configureUI() {
         view.backgroundColor = .themeDarkGreen
     }
+}
+
+extension ThirdPageVC: UICollectionViewDataSource {
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return AddictionService.shared.getReactions().count
+    }
+
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath) as! TagCell
+        do {
+            cell.titleLabel.text = try AddictionService.shared.getReaction(at: indexPath.row).name
+        } catch let error {
+            print(error.localizedDescription)
+        }
+        
+        return cell
+    }
+}
+
+extension ThirdPageVC: UICollectionViewDelegateFlowLayout {
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        do {
+            let item = try AddictionService.shared.getReaction(at: indexPath.row).name
+            var itemSize = item.size(withAttributes: [
+                NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 16)
+            ])
+            if itemSize.width > reactionsTagView.frame.width - 20 {
+                itemSize.width = reactionsTagView.frame.width - 20
+            }
+            return CGSize(width: itemSize.width + 18, height: itemSize.height + 6)
+        } catch let error {
+            print(error.localizedDescription)
+        }
+        return CGSize.zero
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
+        return 5
+    }
+}
+
+extension ThirdPageVC: UICollectionViewDelegate {
+    
 }
 

@@ -12,7 +12,7 @@ class HomeVC: UIViewController {
     // MARK: - Properties
     
     private let addictionNameLabel: UILabel = {
-        let label = Utilities().label(text: "NoAlcohol")
+        let label = Utilities().label(text: "")
         label.font = UIFont.boldSystemFont(ofSize: 24)
         
         return label
@@ -24,15 +24,8 @@ class HomeVC: UIViewController {
         return view
     }()
     
-    private let counterLabel: UILabel = {
-        let label = Utilities().label(text: "00:00:00")
-        label.font = UIFont.boldSystemFont(ofSize: 36)
-
-        return label
-    }()
-    
     var counter: DateComponents {
-        return Calendar.current.dateComponents([.year, .day, .hour, .minute, .second], from: Date.yesterday, to: Date())
+        return Calendar.current.dateComponents([.year, .day, .hour, .minute, .second], from: AddictionService.shared.getLastRelapseDate() ?? Date.yesterday, to: Date())
     }
     
     private let streaksView: StreaksView = {
@@ -60,7 +53,15 @@ class HomeVC: UIViewController {
         super.viewDidLoad()
         
         runCounter()
+        configureSubviews()
+        configureNavBar()
         configureUI()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        
     }
     
     // MARK: - Selectors
@@ -83,7 +84,6 @@ class HomeVC: UIViewController {
         let hours = counter.hour!
         let minutes = counter.minute!
         let seconds = counter.second!
-//        counterLabel.text = String(format: "%02d:%02d:%02d:%02d", days, hours, minutes, seconds)
         abstainingCounterView.counterLabel.text = String(format: "%02d:%02d:%02d:%02d", days, hours, minutes, seconds)
     }
 
@@ -91,9 +91,7 @@ class HomeVC: UIViewController {
     
     func configureUI() {
         view.backgroundColor = .themeDarkGreen
-        
-        configureSubviews()
-        configureNavBar()
+        addictionNameLabel.text = AddictionService.shared.getAddictionName()
     }
     
     func configureSubviews() {

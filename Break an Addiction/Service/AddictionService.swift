@@ -13,6 +13,16 @@ class AddictionService {
     static let shared = AddictionService()
     private var addiction: Addiction!
     
+    var instructionTriggers: [Trigger] {
+        return Array(addiction.instructions.keys)
+    }
+    
+    var getOccurredTriggers: [Trigger] {
+        return addiction.triggers.filter { trigger in
+            trigger.count > 0
+        }
+    }
+    
     // MARK: - Creation
     
 //    func fetchAddiction() {
@@ -20,18 +30,15 @@ class AddictionService {
 //    }
     
     private init() {
-        createAddiction(name: "")
+        createAddiction()
     }
     
-    func createAddiction(name: String) {
-        addiction = Addiction(name: name, triggers: triggers, relapses: relapses, reactions: reactions, instructions: nil)
+    func createAddiction() {
+        addiction = Addiction(name: "", triggers: triggers, relapses: relapses, reactions: reactions, instructions: nil)
     }
-    
-    func fillUpModelWithSampleData() {
-        
-    }
-    
-    func addTrigger(name: String) throws {
+
+    @discardableResult
+    func addTrigger(name: String) throws -> Trigger {
         guard !hasTrigger(with: name) else {
             throw TriggerValidation.triggerWithSuchNameExists
         }
@@ -42,9 +49,12 @@ class AddictionService {
         
         let trigger = Trigger(name: name)
         addiction.triggers.insert(trigger, at: 0)
+        
+        return trigger
     }
     
-    func addReaction(name: String) throws {
+    @discardableResult
+    func addReaction(name: String) throws -> Reaction {
         guard !hasReaction(with: name) else {
             throw ReactionValidation.reactionWithSuchNameExists
         }
@@ -53,12 +63,21 @@ class AddictionService {
             throw ReactionValidation.reactionNameIsEmpty
         }
         
-        addiction.reactions.insert(Reaction(name: name), at: 0)
+        let reaction = Reaction(name: name)
+        addiction.reactions.insert(reaction, at: 0)
+        
+        return reaction
     }
     
-    func addInstruction(trigger: Trigger, reaction: Reaction) {
-        trigger.reaction = reaction
-        addiction.instructions[trigger] = reaction
+    func addInstruction(triggerName: String, reactionName: String) throws {
+        do {
+            let trigger = try addTrigger(name: triggerName)
+            let reaction = try addReaction(name: reactionName)
+            trigger.reaction = reaction
+            addiction.instructions[trigger] = reaction
+        } catch let error {
+            throw error
+        }
     }
     
     func addRelapse(date: Date, instruction: [String : String]?, trigger: Trigger?) {
@@ -67,7 +86,19 @@ class AddictionService {
     
     // MARK: - Read
     
-    func getTriggerReactionsInString() -> [String] {
+    func getAddictionName() -> String {
+        return addiction.name
+    }
+    
+    func getInstructions() -> [Trigger : Reaction] {
+        return addiction.instructions
+    }
+    
+    func getReaction(to trigger: Trigger) -> Reaction {
+        return addiction.instructions[trigger]!
+    }
+    
+    func getReactionsInString() -> [String] {
         var stringReactions = [String]()
         addiction.reactions.forEach {
             stringReactions.append($0.name)
@@ -87,12 +118,37 @@ class AddictionService {
         return addiction.relapses
     }
     
+    func getLastRelapseDate() -> Date? {
+        guard let relapse = addiction.relapses.last else { return nil }
+        return relapse.date
+    }
+    
     func getTriggers() -> [Trigger] {
         return addiction.triggers
     }
     
+    func getTrigger(at index: Int) throws -> Trigger {
+        guard index >= 0 && index < addiction.triggers.count else {
+            throw TriggerValidation.triggerAtSuchIndexDoesNotExist
+        }
+        
+        return addiction.triggers[index]
+    }
+    
+    func getTrigger(with name: String) -> Trigger {
+        return addiction.triggers.first{$0.name == name}!
+    }
+    
     func getReactions() -> [Reaction] {
         return addiction.reactions
+    }
+    
+    func getReaction(at index: Int) throws -> Reaction {
+        guard index >= 0 && index < addiction.reactions.count else {
+            throw ReactionValidation.reactionAtSuchIndexDoesNotExist
+        }
+        
+        return addiction.reactions[index]
     }
     
     private func hasTrigger(with name: String) -> Bool {
@@ -119,6 +175,13 @@ class AddictionService {
     
     // MARK: - Update
     
+    func setAddictionName(name: String) {
+        addiction.name = name
+    }
+    
+    func incrementTriggerRelapseCount(name: String) {
+        
+    }
 }
 
 
@@ -140,32 +203,44 @@ fileprivate let reactions = [Reaction(name: "don't go to the alcohol section"),
 fileprivate let relapses = [Relapse]()
 //fileprivate let relapses = [Relapse(relapseDate: Date.yesterday)]
 
+
+protocol LocalizedDescriptionError: Error {
+    var localizedDescription: String { get }
+}
+
 extension AddictionService {
-    enum TriggerValidation: Error, CustomStringConvertible {
+    enum TriggerValidation: LocalizedDescriptionError {
         
         case triggerWithSuchNameExists
         case triggerNameIsEmpty
+        case triggerAtSuchIndexDoesNotExist
         
-        var description: String {
+        var localizedDescription: String {
                 switch self {
                 case .triggerWithSuchNameExists:
                     return "Trigger with such name already exists"
                 case .triggerNameIsEmpty:
                     return "Trigger name is empty. Can't add triggers with empty names"
+                case .triggerAtSuchIndexDoesNotExist:
+                    return "Trigger at such index does not exist"
                 }
             }
     }
     
-    enum ReactionValidation: Error, CustomStringConvertible {
+    enum ReactionValidation: LocalizedDescriptionError {
+        
         case reactionWithSuchNameExists
         case reactionNameIsEmpty
+        case reactionAtSuchIndexDoesNotExist
         
-        var description: String {
+        var localizedDescription: String {
                 switch self {
                 case .reactionWithSuchNameExists:
                     return "Reaction with such name already exists"
                 case .reactionNameIsEmpty:
                     return "Reaction name is empty. Can't add reactions with empty names"
+                case .reactionAtSuchIndexDoesNotExist:
+                    return "Reaction at such index does not exist"
                 }
             }
     }

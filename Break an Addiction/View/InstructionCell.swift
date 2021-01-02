@@ -12,22 +12,24 @@ class InstructionCell: UITableViewCell {
     // MARK: - Properties
     
     let triggerLabel: InstructionLabel = {
-        let lbl = InstructionLabel()
+        let triggerLabel = InstructionLabel()
         
-        return lbl
+        return triggerLabel
     }()
     
     private let arrowView: UIView = {
-        let v = UIView()
+        let arrowView = UIView()
         
-        return v
+        return arrowView
     }()
     
-    let solutionLabel: InstructionLabel = {
-        let lbl = InstructionLabel()
+    let reactionLabel: InstructionLabel = {
+        let reactionLabel = InstructionLabel()
         
-        return lbl
+        return reactionLabel
     }()
+    
+    let instruction: [Trigger : Reaction]? = nil
     
     // MARK: - Lifecycle
     
@@ -47,8 +49,6 @@ class InstructionCell: UITableViewCell {
 //        contentView.frame = contentView.frame.inset(by: UIEdgeInsets(top: 40, left: 0, bottom: 40, right: 0))
 //    }
     
-    // MARK: - Selectors
-    
     // MARK: - Helpers
     
     func configureUI() {
@@ -61,13 +61,13 @@ class InstructionCell: UITableViewCell {
         contentView.addSubview(triggerLabel)
         triggerLabel.centerY(inView: contentView, leftAnchor: leftAnchor, paddingLeft: 8)
         
-        contentView.addSubview(solutionLabel)
-        solutionLabel.centerY(inView: contentView, rightAnchor: rightAnchor, paddingRight: 8)
+        contentView.addSubview(reactionLabel)
+        reactionLabel.centerY(inView: contentView, rightAnchor: rightAnchor, paddingRight: 8)
     }
     
-    func set(trigger: String, solution: String) {
-        triggerLabel.text = trigger
-        solutionLabel.text = solution
+    func set(triggerName: String, reactionName: String) {
+        triggerLabel.text = triggerName
+        reactionLabel.text = reactionName
     }
 }
 

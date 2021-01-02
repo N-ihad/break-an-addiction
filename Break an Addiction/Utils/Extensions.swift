@@ -253,3 +253,17 @@ extension Date {
         return relapseDateInString
     }
 }
+
+// MARK: - UICollectionView
+
+extension UICollectionView {
+    func calculateCellSizeBasedOnText(text: String) -> CGSize {
+        var itemSize = text.size(withAttributes: [
+            NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 16)
+        ])
+        if itemSize.width > self.frame.width - 20 {
+            itemSize.width = self.frame.width - 20
+        }
+        return CGSize(width: itemSize.width + 18, height: itemSize.height + 6)
+    }
+}

@@ -7,7 +7,7 @@
 
 import Foundation
 
-class Reaction: TagViewProtocol {
+class Reaction {
     var name: String
     
     init(name: String) {

@@ -9,8 +9,6 @@ import UIKit
 
 private let reuseIdentifier = "InstructionCell"
 
-private var instructions = [String : String]()
-
 class InstructionsVC: UIViewController {
     
     // MARK: - Properties
@@ -29,10 +27,13 @@ class InstructionsVC: UIViewController {
     
     @objc func plusRightBarButtonPressed() {
         let alertController = Utilities().alertWithTextfields(caption: "Add new instruction", placeholders: [.trigger, .relapse], completion: { [weak self] values in
-            // for awhile
-            instructions[values[0]] = values[1]
-//            triggers.insert(values[0], at: 0)
-//            solutions.insert(values[1], at: 0)
+            do {
+                try AddictionService.shared.addInstruction(triggerName: values[0], reactionName: values[1])
+            } catch {
+                let error = error as! LocalizedDescriptionError
+                let alert = Utilities().alertError(message: error.localizedDescription)
+                self?.present(alert, animated: true, completion: nil)
+            }
             self?.tableView.reloadData()
         })
         present(alertController, animated: true, completion: nil)
@@ -45,7 +46,6 @@ class InstructionsVC: UIViewController {
         
         configureTableView()
         configureNavBar()
-        setUpDataForTableView()
     }
     
     func configureTableView() {
@@ -66,15 +66,6 @@ class InstructionsVC: UIViewController {
         addInstructionButton.addTarget(self, action: #selector(plusRightBarButtonPressed), for: .touchUpInside)
         let barButton = UIBarButtonItem(customView: addInstructionButton)
         navigationItem.rightBarButtonItem = barButton
-//        navigationController?.navigationBar.addSubview(addInstructionButton)
-//        addInstructionButton.anchor(top: navigationController?.navigationBar.topAnchor, right: navigationController?.navigationBar.rightAnchor, paddingTop: 50, paddingRight: 20)
-//        navigationItem.rightBarButtonItem?.setTitlePositionAdjustment(.init(horizontal: 10, vertical: 60), for: UIBarMetrics.default)
-    }
-    
-    func setUpDataForTableView() {
-        for (trigger, solution) in zip(AddictionService.shared.getTriggersInString(), AddictionService.shared.getTriggerReactionsInString()) {
-            instructions[trigger] = solution
-        }
     }
 }
 
@@ -82,12 +73,13 @@ class InstructionsVC: UIViewController {
 extension InstructionsVC: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return instructions.count
+        return AddictionService.shared.getInstructions().count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: reuseIdentifier) as! InstructionCell
-        cell.set(trigger: Array(instructions)[indexPath.row].key, solution: Array(instructions)[indexPath.row].value)
+        let trigger = AddictionService.shared.instructionTriggers[indexPath.row]
+        cell.set(triggerName: trigger.name, reactionName: trigger.reaction!.name)
         
         return cell
     }
@@ -98,7 +90,7 @@ extension InstructionsVC: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return Array(instructions)[indexPath.row].value.height(withConstrainedWidth: (tableView.frame.width/2)-20, font: UIFont.boldSystemFont(ofSize: 17)) + 40
+        return AddictionService.shared.instructionTriggers[indexPath.row].reaction!.name.height(withConstrainedWidth: (tableView.frame.width/2)-20, font: UIFont.boldSystemFont(ofSize: 17)) + 40
     }
     
 //    func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {

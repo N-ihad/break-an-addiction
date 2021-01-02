@@ -16,7 +16,7 @@ class FirstPageVC: UIViewController {
         return lbl
     }()
     
-    private let habitNameTextField: TextField = {
+    private let addictionNameTextField: TextField = {
         let tf = TextField(frame: CGRect(), placeholder: "Name your addiction, e.g. NoAlcohol")
 
         return tf
@@ -34,6 +34,7 @@ class FirstPageVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        configureAddictionNameTextField()
         configureSubviews()
         configureUI()
     }
@@ -47,8 +48,12 @@ class FirstPageVC: UIViewController {
     
     // MARK: - Helpers
     
+    func configureAddictionNameTextField() {
+        addictionNameTextField.delegate = self
+    }
+    
     func configureSubviews() {
-        let stack = UIStackView(arrangedSubviews: [motivationLabel, habitNameTextField])
+        let stack = UIStackView(arrangedSubviews: [motivationLabel, addictionNameTextField])
         stack.axis = .vertical
         stack.spacing = 20
         stack.distribution = .equalCentering
@@ -61,6 +66,15 @@ class FirstPageVC: UIViewController {
     
     func configureUI() {
         view.backgroundColor = .themeDarkGreen
+    }
+}
+
+
+extension FirstPageVC: UITextFieldDelegate {
+    func textFieldDidEndEditing(_ textField: UITextField) {
+        if let text = textField.text, !text.isEmpty {
+            AddictionService.shared.setAddictionName(name: text)
+        }
     }
 }
 

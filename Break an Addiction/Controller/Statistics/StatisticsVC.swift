@@ -164,7 +164,7 @@ extension StatisticsVC: DataFilterViewDelegate {
 extension StatisticsVC: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return tableView == relapsesTableView ? AddictionService.shared.getRelapses().count : AddictionService.shared.getTriggers().count
+        return tableView == relapsesTableView ? AddictionService.shared.getRelapses().count : AddictionService.shared.getOccurredTriggers.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -175,7 +175,7 @@ extension StatisticsVC: UITableViewDelegate, UITableViewDataSource {
             return cell
         } else {
             let cell = tableView.dequeueReusableCell(withIdentifier: reuseIdentifierTrigger) as! TriggerCell
-            cell.set(trigger: AddictionService.shared.getTriggers()[indexPath.row])
+            cell.set(trigger: AddictionService.shared.getOccurredTriggers[indexPath.row])
             cell.delegate = self
             return cell
         }

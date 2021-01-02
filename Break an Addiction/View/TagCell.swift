@@ -7,9 +7,15 @@
 
 import UIKit
 
+protocol TagCellDelegate: class {
+    func handleTagPressed(_ cell: TagCell)
+}
+
 class TagCell: UICollectionViewCell {
     
     // MARK: - Properties
+    
+    weak var delegate: TagCellDelegate?
     
     let titleLabel: UILabel = {
         let label = UILabel()
@@ -44,13 +50,14 @@ class TagCell: UICollectionViewCell {
     
     // MARK: - Selectors
     @objc func tagCellTapped() {
-        print("DEBUG: tagCellTapped")
+        isSelected = !isSelected
+        delegate?.handleTagPressed(self)
     }
     
     // MARK: - Helpers
     func configureUI() {
-//        let gesture = UITapGestureRecognizer(target: self, action: #selector(tagCellTapped))
-//        contentView.addGestureRecognizer(gesture)
+        let gesture = UITapGestureRecognizer(target: self, action: #selector(tagCellTapped))
+        contentView.addGestureRecognizer(gesture)
         
         configureProperties()
         configureSubviews()

@@ -35,13 +35,14 @@ class SecondPageVC: UIViewController {
         return btn
     }()
     
-    private let triggersTagView = TagView(frame: .zero, initializeWith: AddictionService.shared.getTriggers())
+    private let triggersTagView = TagView(frame: .zero)
     
     // MARK: - Lifecycle
 
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        configureTagView()
         configureSubviews()
         configureUI()
     }
@@ -59,8 +60,8 @@ class SecondPageVC: UIViewController {
             do {
                 try AddictionService.shared.addTrigger(name: values[0])
             } catch let error {
-                let alert = UIAlertController(title: "Error", message: error.localizedDescription, preferredStyle: UIAlertController.Style.alert)
-                alert.addAction(UIAlertAction(title: "OK", style: UIAlertAction.Style.default, handler: nil))
+                let error = error as! LocalizedDescriptionError
+                let alert = Utilities().alertError(message: error.localizedDescription)
                 self?.present(alert, animated: true, completion: nil)
             }
             self?.triggersTagView.collectionView.reloadData()
@@ -75,6 +76,13 @@ class SecondPageVC: UIViewController {
     }
     
     // MARK: - Helpers
+    
+    func configureTagView() {
+        triggersTagView.collectionView.delegate = self
+        triggersTagView.collectionView.dataSource = self
+        triggersTagView.collectionView.register(TagCell.self, forCellWithReuseIdentifier: reuseIdentifier)
+    }
+    
     func configureSubviews() {
         let stack = UIStackView(arrangedSubviews: [triggersTagCaptionLabel, triggersTagView])
         stack.axis = .vertical
@@ -93,15 +101,49 @@ class SecondPageVC: UIViewController {
     
     func configureUI() {
         view.backgroundColor = .themeDarkGreen
-//        DispatchQueue.main.asyncAfter(deadline: .now() + 2) { [weak self] in
-//            self?.triggersTagView.collectionView.flashScrollIndicators()
-//        }
-//        UIView.animate
-        
-//        UIView.animate(withDuration: {$duration},
-//              animations: { /* Animation Here */ },
-//              completion: { _ in self.performSegue(withIdentifier: "segueIdentifierHere", sender: nil) }
-
     }
 }
 
+
+extension SecondPageVC: UICollectionViewDataSource {
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return AddictionService.shared.getTriggers().count
+    }
+
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath) as! TagCell
+        do {
+            cell.titleLabel.text = try AddictionService.shared.getTrigger(at: indexPath.row).name
+        } catch let error {
+            print(error.localizedDescription)
+        }
+        
+        return cell
+    }
+}
+
+extension SecondPageVC: UICollectionViewDelegateFlowLayout {
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        do {
+            let item = try AddictionService.shared.getTrigger(at: indexPath.row).name
+            var itemSize = item.size(withAttributes: [
+                NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 16)
+            ])
+            if itemSize.width > triggersTagView.frame.width - 20 {
+                itemSize.width = triggersTagView.frame.width - 20
+            }
+            return CGSize(width: itemSize.width + 18, height: itemSize.height + 6)
+        } catch let error {
+            print(error.localizedDescription)
+        }
+        return CGSize.zero
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
+        return 5
+    }
+}
+
+extension SecondPageVC: UICollectionViewDelegate {
+    
+}

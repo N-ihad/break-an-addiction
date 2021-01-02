@@ -96,9 +96,6 @@ class Utilities {
             for i in 0..<placeholders.count {
                 textFieldsValues.append((alertController.textFields![i] as UITextField).text ?? "")
             }
-//            let triggerTF = alertController.textFields![0] as UITextField
-//            let solutionTF = alertController.textFields![1] as UITextField
-            
             completion(textFieldsValues)
         }
         let cancelAction = UIAlertAction(title: "Cancel", style: UIAlertAction.Style.cancel, handler: { (action : UIAlertAction!) -> Void in })
@@ -107,6 +104,12 @@ class Utilities {
         alertController.addAction(cancelAction)
         
         return alertController
+    }
+    
+    func alertError(message: String) -> UIAlertController {
+        let alert = UIAlertController(title: "Error", message: message, preferredStyle: UIAlertController.Style.alert)
+        alert.addAction(UIAlertAction(title: "OK", style: UIAlertAction.Style.default, handler: nil))
+        return alert
     }
 }
 

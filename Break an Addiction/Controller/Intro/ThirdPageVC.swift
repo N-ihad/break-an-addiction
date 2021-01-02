@@ -37,6 +37,10 @@ class ThirdPageVC: UIViewController {
         return btn
     }()
     
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return .lightContent
+    }
+    
     // MARK: - Lifecycle
 
     override func viewDidLoad() {

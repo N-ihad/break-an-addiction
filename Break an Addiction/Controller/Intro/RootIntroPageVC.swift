@@ -10,12 +10,17 @@ import UIKit
 class RootIntroPageVC: UIPageViewController {
     
     // MARK: - Properties
+    
     lazy var pagesVCList: [UIViewController] = {
         let firstPageVC = FirstPageVC()
         let secondPageVC = SecondPageVC()
         let thirdPageVC = ThirdPageVC()
         return [firstPageVC, secondPageVC, thirdPageVC]
     }()
+    
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return .lightContent
+    }
     
     // MARK: - Lifecycle
 

@@ -37,6 +37,10 @@ class SecondPageVC: UIViewController {
     
     private let triggersTagView = TagView(frame: .zero)
     
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return .lightContent
+    }
+    
     // MARK: - Lifecycle
 
     override func viewDidLoad() {

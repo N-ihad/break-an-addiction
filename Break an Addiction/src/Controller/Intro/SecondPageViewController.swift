@@ -1,0 +1,153 @@
+//
+//  SecondPageViewController.swift
+//  Break an Addiction
+//
+//  Created by Nihad on 12/12/20.
+//
+
+import UIKit
+
+private let reuseIdentifier = "TagCell"
+
+class SecondPageViewController: UIViewController {
+    
+    // MARK: - Properties
+    
+    private let triggersTagCaptionLabel: UILabel = {
+        let lbl = Helper().labelCaption(text: .trigger, highlightAndUnderlineSubstring: "trigger/event")
+        
+        return lbl
+    }()
+    
+    private let addTriggerButton: UIButton = {
+        let btn = UIButton()
+        btn.setImage(size: 22, imgName: "plus")
+        btn.tintColor = .themeOrange
+        btn.addTarget(self, action: #selector(addTriggerButtonPressed), for: .touchUpInside)
+        
+        return btn
+    }()
+    
+    private let nextPageButton: UIButton = {
+        let btn = Helper().button(text: "Next")
+        btn.addTarget(self, action: #selector(nextPageButtonPressed), for: .touchUpInside)
+        
+        return btn
+    }()
+    
+    private let triggersTagView = TagsView(frame: .zero)
+    
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return .lightContent
+    }
+    
+    // MARK: - Lifecycle
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        configureTagView()
+        configureSubviews()
+        configureUI()
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(true)
+        
+        triggersTagView.collectionView.flashScrollIndicators()
+    }
+
+    // MARK: - Selectors
+    
+    @objc func addTriggerButtonPressed() {
+        let alertController = Helper().alertWithTextfields(caption: "Add new trigger", placeholders: [.trigger], completion: { [weak self] values in
+            do {
+                try AddictionService.shared.addTrigger(name: values[0])
+            } catch let error {
+                let error = error as! LocalizedDescriptionError
+                let alert = Helper().alertError(message: error.localizedDescription)
+                self?.present(alert, animated: true, completion: nil)
+            }
+            self?.triggersTagView.collectionView.reloadData()
+        })
+        present(alertController, animated: true, completion: nil)
+    }
+    
+    @objc func nextPageButtonPressed() {
+        if let controller = self.parent as? RootIntroPageViewController {
+            controller.goToNextPage()
+        }
+    }
+    
+    // MARK: - Helpers
+    
+    func configureTagView() {
+        triggersTagView.collectionView.delegate = self
+        triggersTagView.collectionView.dataSource = self
+        triggersTagView.collectionView.register(TagsCollectionViewCell.self, forCellWithReuseIdentifier: reuseIdentifier)
+    }
+    
+    func configureSubviews() {
+        let stack = UIStackView(arrangedSubviews: [triggersTagCaptionLabel, triggersTagView])
+        stack.axis = .vertical
+        stack.spacing = 30
+        stack.distribution = .equalCentering
+
+        view.addSubview(stack)
+
+        stack.anchor(top: view.topAnchor, left: view.leftAnchor, right: view.rightAnchor, paddingTop: 120, paddingLeft: 32, paddingRight: 32)
+
+        view.addSubview(nextPageButton)
+        view.addSubview(addTriggerButton)
+        addTriggerButton.centerX(inView: view, topAnchor: stack.bottomAnchor, paddingTop: 20)
+        nextPageButton.centerX(inView: view, topAnchor: addTriggerButton.bottomAnchor, paddingTop: 20)
+    }
+    
+    func configureUI() {
+        view.backgroundColor = .themeDarkGreen
+    }
+}
+
+
+extension SecondPageViewController: UICollectionViewDataSource {
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return AddictionService.shared.triggers.count
+    }
+
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath) as! TagsCollectionViewCell
+        do {
+            cell.textLabel.text = try AddictionService.shared.trigger(at: indexPath.row).name
+        } catch let error {
+            print(error.localizedDescription)
+        }
+        
+        return cell
+    }
+}
+
+extension SecondPageViewController: UICollectionViewDelegateFlowLayout {
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        do {
+            let item = try AddictionService.shared.trigger(at: indexPath.row).name
+            var itemSize = item.size(withAttributes: [
+                NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 16)
+            ])
+            if itemSize.width > triggersTagView.frame.width - 20 {
+                itemSize.width = triggersTagView.frame.width - 20
+            }
+            return CGSize(width: itemSize.width + 18, height: itemSize.height + 6)
+        } catch let error {
+            print(error.localizedDescription)
+        }
+        return CGSize.zero
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
+        return 5
+    }
+}
+
+extension SecondPageViewController: UICollectionViewDelegate {
+    
+}

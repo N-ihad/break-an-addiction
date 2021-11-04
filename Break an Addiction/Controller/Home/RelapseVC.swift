@@ -75,11 +75,11 @@ class RelapseVC: UIViewController {
     func configureTagViews() {
         triggersTagView.collectionView.delegate = self
         triggersTagView.collectionView.dataSource = self
-        triggersTagView.collectionView.register(TagCell.self, forCellWithReuseIdentifier: triggerReuseIdentifier)
+        triggersTagView.collectionView.register(TagCollectionViewCell.self, forCellWithReuseIdentifier: triggerReuseIdentifier)
         
         reactionsTagView.collectionView.delegate = self
         reactionsTagView.collectionView.dataSource = self
-        reactionsTagView.collectionView.register(TagCell.self, forCellWithReuseIdentifier: reactionReuseIdentifier)
+        reactionsTagView.collectionView.register(TagCollectionViewCell.self, forCellWithReuseIdentifier: reactionReuseIdentifier)
     }
     
     func configureUI() {
@@ -124,19 +124,19 @@ extension RelapseVC: UICollectionViewDataSource {
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         if collectionView == triggersTagView.collectionView {
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: triggerReuseIdentifier, for: indexPath) as! TagCell
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: triggerReuseIdentifier, for: indexPath) as! TagCollectionViewCell
             cell.delegate = self
             do {
-                cell.titleLabel.text = try AddictionService.shared.getTrigger(at: indexPath.row).name
+                cell.textLabel.text = try AddictionService.shared.getTrigger(at: indexPath.row).name
             } catch let error {
                 print(error.localizedDescription)
             }
             return cell
         } else {
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reactionReuseIdentifier, for: indexPath) as! TagCell
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reactionReuseIdentifier, for: indexPath) as! TagCollectionViewCell
             cell.delegate = self
             do {
-                cell.titleLabel.text = try AddictionService.shared.getReaction(at: indexPath.row).name
+                cell.textLabel.text = try AddictionService.shared.getReaction(at: indexPath.row).name
             } catch let error {
                 print(error.localizedDescription)
             }
@@ -165,8 +165,8 @@ extension RelapseVC: UICollectionViewDelegate {
     
 }
 
-extension RelapseVC: TagCellDelegate {
-    func handleTagPressed(_ cell: TagCell) {
-        trigger = AddictionService.shared.getTrigger(with: cell.titleLabel.text!)
+extension RelapseVC: TagCellCollectionViewDelegate {
+    func tagCollectionViewCellDidSelect(_ cell: TagCollectionViewCell) {
+        trigger = AddictionService.shared.getTrigger(with: cell.textLabel.text!)
     }
 }

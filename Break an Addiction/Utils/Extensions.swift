@@ -115,45 +115,6 @@ extension UIScrollView {
     }
 }
 
-
-// MARK: - UIColor
-
-extension UIColor {
-    static func rgb(red: CGFloat, green: CGFloat, blue: CGFloat) -> UIColor {
-        return UIColor(red: red/255, green: green/255, blue: blue/255, alpha: 1)
-    }
-    
-    static func rgba(red: CGFloat, green: CGFloat, blue: CGFloat, alpha: CGFloat) -> UIColor {
-        return UIColor(red: red/255, green: green/255, blue: blue/255, alpha: alpha)
-    }
-    
-    static func hexToRGB(hex: String, alpha: CGFloat = 1.0) -> UIColor {
-        var hexFormatted: String = hex.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines).uppercased()
-
-        if hexFormatted.hasPrefix("#") {
-            hexFormatted = String(hexFormatted.dropFirst())
-        }
-
-        assert(hexFormatted.count == 6, "Invalid hex code used.")
-
-        var rgbValue: UInt64 = 0
-        Scanner(string: hexFormatted).scanHexInt64(&rgbValue)
-
-        return UIColor(red: CGFloat((rgbValue & 0xFF0000) >> 16) / 255.0,
-                  green: CGFloat((rgbValue & 0x00FF00) >> 8) / 255.0,
-                  blue: CGFloat(rgbValue & 0x0000FF) / 255.0,
-                  alpha: alpha)
-    }
-    
-    static let themeDarkGreen = UIColor.hexToRGB(hex: "#164A41")
-    static let themeGreen = UIColor.hexToRGB(hex: "#4D774E")
-    static let themeLightGreen = UIColor.hexToRGB(hex: "#9DC88D")
-    static let themeOrange = UIColor.hexToRGB(hex: "#F1B24A")
-//    static let themeBlue = UIColor.rgb(red: 0, green: 122, blue: 255)
-//    static let themeGrey = UIColor.rgb(red: 238, green: 238, blue: 238)
-    static let themePlaceHolderColor = UIColor.rgb(red: 155, green: 155, blue: 157)
-}
-
 // MARK: - UILabel
 extension UILabel {
 

@@ -7,81 +7,73 @@
 
 import UIKit
 
-private let reuseIdentifier = "DataCell"
-
-protocol DataFilterViewDelegate: class {
-    func filterView(_ view: DataFilterView, didSelect indexPath: IndexPath)
+protocol DataFilterViewDelegate: AnyObject {
+    func dataFilterView(_ view: DataFilterView, didSelect indexPath: IndexPath)
 }
 
-class DataFilterView: UIView {
-    
-    // MARK: - Properties
-    
+final class DataFilterView: UIView {
+
+    private let reuseIdentifier = "DataCell"
+
     weak var delegate: DataFilterViewDelegate?
-    
-    lazy var collectionView: UICollectionView = {
-        let layout = UICollectionViewFlowLayout()
-        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
+
+    let collectionView: UICollectionView = {
+        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
         collectionView.backgroundColor = .clear
-        collectionView.delegate = self
-        collectionView.dataSource = self
-        
-        
         return collectionView
     }()
-    
-    // MARK: - Lifecycle
-    
+
     override init(frame: CGRect) {
         super.init(frame: frame)
-        
-        configureUI()
-        configureCollectionView()
+
+        setup()
+        layout()
     }
     
     required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+        fatalError("init(coder:) has not been implemented. No storyboards")
+    }
+
+    private func setup() {
+        collectionView.delegate = self
+        collectionView.dataSource = self
+        collectionView.register(DataFilterCell.self, forCellWithReuseIdentifier: reuseIdentifier)
+        collectionView.selectItem(at: IndexPath(row: 0, section: 0), animated: true, scrollPosition: .left)
     }
     
-    // MARK: - Helpers
-    
-    func configureUI() {
-        configureSubviews()
-    }
-    
-    func configureSubviews() {
+    private func layout() {
         addSubview(collectionView)
         collectionView.pinTo(self)
     }
-    
-    func configureCollectionView() {
-        collectionView.register(FilteredDataCell.self, forCellWithReuseIdentifier: reuseIdentifier)
-        
-        let selectedIndexPath = IndexPath(row: 0, section: 0)
-        collectionView.selectItem(at: selectedIndexPath, animated: true, scrollPosition: .left)
-    }
 }
 
+// MARK: - UICollectionViewDataSource {
 extension DataFilterView: UICollectionViewDataSource {
-    
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        2
+        return 2
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath) as! FilteredDataCell
-        cell.titleLabel.text = indexPath.row == 0 ? "Relapses" : "Triggers"
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath) as! DataFilterCell
+
+        if indexPath.row == 0 {
+            cell.setText("Relapses")
+        } else {
+            cell.setText("Triggers")
+        }
         
         return cell
     }
 }
 
+// MARK: - UICollectionViewDelegate
 extension DataFilterView: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        delegate?.filterView(self, didSelect: indexPath)
+        delegate?.dataFilterView(self, didSelect: indexPath)
     }
 }
 
+// MARK: - UICollectionViewDelegateFlowLayout
 extension DataFilterView: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         return CGSize(width: frame.width / 2, height: frame.height)

@@ -84,7 +84,7 @@ class SecondPageVC: UIViewController {
     func configureTagView() {
         triggersTagView.collectionView.delegate = self
         triggersTagView.collectionView.dataSource = self
-        triggersTagView.collectionView.register(TagCell.self, forCellWithReuseIdentifier: reuseIdentifier)
+        triggersTagView.collectionView.register(TagCollectionViewCell.self, forCellWithReuseIdentifier: reuseIdentifier)
     }
     
     func configureSubviews() {
@@ -115,9 +115,9 @@ extension SecondPageVC: UICollectionViewDataSource {
     }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath) as! TagCell
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath) as! TagCollectionViewCell
         do {
-            cell.titleLabel.text = try AddictionService.shared.getTrigger(at: indexPath.row).name
+            cell.textLabel.text = try AddictionService.shared.getTrigger(at: indexPath.row).name
         } catch let error {
             print(error.localizedDescription)
         }

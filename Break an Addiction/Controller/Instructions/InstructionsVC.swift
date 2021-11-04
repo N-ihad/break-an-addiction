@@ -53,7 +53,7 @@ class InstructionsVC: UIViewController {
         tableView.dataSource = self
         view.addSubview(tableView)
         tableView.rowHeight = 80
-        tableView.register(InstructionCell.self, forCellReuseIdentifier: reuseIdentifier)
+        tableView.register(InstructionTableViewCell.self, forCellReuseIdentifier: reuseIdentifier)
         tableView.anchor(top: view.safeAreaLayoutGuide.topAnchor, left: view.leftAnchor, bottom: view.safeAreaLayoutGuide.bottomAnchor, right: view.rightAnchor, paddingTop: 10, paddingLeft: 0, paddingBottom: 0, paddingRight: 0)
 //        tableView.pinTo(view)
         tableView.backgroundColor = .themeDarkGreen
@@ -77,9 +77,9 @@ extension InstructionsVC: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: reuseIdentifier) as! InstructionCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: reuseIdentifier) as! InstructionTableViewCell
         let trigger = AddictionService.shared.instructionTriggers[indexPath.row]
-        cell.set(triggerName: trigger.name, reactionName: trigger.reaction!.name)
+        cell.set(with: trigger.name, trigger.reaction!.name)
         
         return cell
     }

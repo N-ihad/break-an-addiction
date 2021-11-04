@@ -84,7 +84,7 @@ class ThirdPageVC: UIViewController {
     func configureTagView() {
         reactionsTagView.collectionView.delegate = self
         reactionsTagView.collectionView.dataSource = self
-        reactionsTagView.collectionView.register(TagCell.self, forCellWithReuseIdentifier: reuseIdentifier)
+        reactionsTagView.collectionView.register(TagCollectionViewCell.self, forCellWithReuseIdentifier: reuseIdentifier)
     }
     
     func configureSubviews() {
@@ -113,9 +113,9 @@ extension ThirdPageVC: UICollectionViewDataSource {
     }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath) as! TagCell
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath) as! TagCollectionViewCell
         do {
-            cell.titleLabel.text = try AddictionService.shared.getReaction(at: indexPath.row).name
+            cell.textLabel.text = try AddictionService.shared.getReaction(at: indexPath.row).name
         } catch let error {
             print(error.localizedDescription)
         }

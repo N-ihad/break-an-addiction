@@ -7,35 +7,27 @@
 
 import UIKit
 
-class TagView: UIView {
-    
-    // MARK: - Properties
-    
-    lazy var collectionView: UICollectionView = {
-        let layout = UICollectionViewFlowLayout()
-        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
+final class TagView: UIView {
+
+    let collectionView: UICollectionView = {
+        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
         collectionView.backgroundColor = .clear
-        
         return collectionView
     }()
-    
-    // MARK: - Lifecycle
-    
+
     override init(frame: CGRect) {
         super.init(frame: frame)
         
-        self.heightAnchor.constraint(equalToConstant: 170).isActive = true
-        
-        configureSubviews()
+        layout()
     }
     
     required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+        fatalError("init(coder:) has not been implemented. No storyboards")
     }
-    
-    // MARK: - Helpers
-    
-    func configureSubviews() {
+
+    private func layout() {
+        heightAnchor.constraint(equalToConstant: 170).isActive = true
+
         addSubview(collectionView)
         collectionView.pinTo(self)
     }

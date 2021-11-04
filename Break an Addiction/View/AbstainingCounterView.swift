@@ -7,44 +7,36 @@
 
 import UIKit
 
-class AbstainingCounterView: UIView {
-    
-    // MARK: - Properties
-    
-    let counterLabel: UILabel = {
+final class AbstainingCounterView: UIView {
+
+    private let counterLabel: UILabel = {
         let counterLabel = Utilities().label(text: "")
-        counterLabel.font = UIFont.boldSystemFont(ofSize: 34)
-        
+        counterLabel.font = .abstainingCounter
         return counterLabel
     }()
     
-    let displayFormat: UILabel = {
-        let displayFormat = Utilities().label(text: "days:hours:mins:secs")
-        
-        return displayFormat
-    }()
-    
-    // MARK: - Lifecycle
-    
+    private let displayFormatLabel = Utilities().label(text: "days:hours:mins:secs")
+
     override init(frame: CGRect) {
         super.init(frame: frame)
         
-        configureSubviews()
+        layout()
     }
     
     required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+        fatalError("init(coder:) has not been implemented. No storyboards")
     }
-    
-    // MARK: - Helpers
-    
-    func configureSubviews() {
-        let stack = UIStackView(arrangedSubviews: [counterLabel, displayFormat])
+
+    private func layout() {
+        let stack = UIStackView(arrangedSubviews: [counterLabel, displayFormatLabel])
         addSubview(stack)
         stack.axis = .vertical
         stack.spacing = 10
         stack.distribution = .fillEqually
-        
         stack.pinTo(self)
+    }
+
+    func set(with counterText: String) {
+        counterLabel.text = counterText
     }
 }

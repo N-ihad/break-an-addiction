@@ -83,14 +83,14 @@ class StatisticsVC: UIViewController {
     @objc func handleLeftSwipe() {
         let selectedIndexPath = IndexPath(row: 1, section: 0)
         filterView.collectionView.selectItem(at: selectedIndexPath, animated: true, scrollPosition: .right)
-        filterView(filterView, didSelect: selectedIndexPath)
+        dataFilterView(filterView, didSelect: selectedIndexPath)
         
     }
     
     @objc func handleRightSwipe() {
         let selectedIndexPath = IndexPath(row: 0, section: 0)
         filterView.collectionView.selectItem(at: selectedIndexPath, animated: true, scrollPosition: .left)
-        filterView(filterView, didSelect: selectedIndexPath)
+        dataFilterView(filterView, didSelect: selectedIndexPath)
     }
 
     // MARK: - Helpers
@@ -121,10 +121,10 @@ class StatisticsVC: UIViewController {
     func configureTableView() {
         relapsesTableView.delegate = self
         relapsesTableView.dataSource = self
-        relapsesTableView.register(RelapseCell.self, forCellReuseIdentifier: reuseIdentifierRelapse)
+        relapsesTableView.register(RelapseTableViewCell.self, forCellReuseIdentifier: reuseIdentifierRelapse)
         triggersTableView.delegate = self
         triggersTableView.dataSource = self
-        triggersTableView.register(TriggerCell.self, forCellReuseIdentifier: reuseIdentifierTrigger)
+        triggersTableView.register(TriggerTableViewCell.self, forCellReuseIdentifier: reuseIdentifierTrigger)
     }
     
     func configureSubviews() {
@@ -147,8 +147,8 @@ class StatisticsVC: UIViewController {
 }
 
 extension StatisticsVC: DataFilterViewDelegate {
-    func filterView(_ view: DataFilterView, didSelect indexPath: IndexPath) {
-        guard let cell = view.collectionView.cellForItem(at: indexPath) as? FilteredDataCell else {return}
+    func dataFilterView(_ view: DataFilterView, didSelect indexPath: IndexPath) {
+        guard let cell = view.collectionView.cellForItem(at: indexPath) as? DataFilterCell else {return}
         guard self.underlineView.frame.origin.x != cell.frame.origin.x else {return}
         
         let xPosition = cell.frame.origin.x
@@ -169,13 +169,13 @@ extension StatisticsVC: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if tableView == relapsesTableView {
-            let cell = tableView.dequeueReusableCell(withIdentifier: reuseIdentifierRelapse) as! RelapseCell
-            cell.set(relapse: AddictionService.shared.getRelapses()[indexPath.row])
+            let cell = tableView.dequeueReusableCell(withIdentifier: reuseIdentifierRelapse) as! RelapseTableViewCell
+            cell.set(with: AddictionService.shared.getRelapses()[indexPath.row])
             cell.delegate = self
             return cell
         } else {
-            let cell = tableView.dequeueReusableCell(withIdentifier: reuseIdentifierTrigger) as! TriggerCell
-            cell.set(trigger: AddictionService.shared.getOccurredTriggers[indexPath.row])
+            let cell = tableView.dequeueReusableCell(withIdentifier: reuseIdentifierTrigger) as! TriggerTableViewCell
+            cell.set(with: AddictionService.shared.getOccurredTriggers[indexPath.row])
             cell.delegate = self
             return cell
         }
@@ -207,14 +207,14 @@ extension StatisticsVC: UITableViewDelegate, UITableViewDataSource {
 //    }
 }
 
-extension StatisticsVC: RelapseCellDelegate, TriggerCellDelegate {
-    func handleCellPressed(_ cell: RelapseCell) {
+extension StatisticsVC: RelapseTableViewCellDelegate, TriggerTableViewCellDelegate {
+    func relapseTableViewCellDidSelect(_ cell: RelapseTableViewCell) {
         let relapseNav = UINavigationController(rootViewController: RelapseDetailsVC())
         relapseNav.modalPresentationStyle = .popover
         present(relapseNav, animated: true, completion: nil)
     }
     
-    func handleCellPressed(_ cell: TriggerCell) {
+    func triggerTableViewCellDidSelect(_ cell: TriggerTableViewCell) {
         let triggerNav = UINavigationController(rootViewController: TriggerDetailsVC())
         triggerNav.modalPresentationStyle = .popover
         present(triggerNav, animated: true, completion: nil)

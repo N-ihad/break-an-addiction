@@ -42,7 +42,7 @@ class MainTabController: UITabBarController {
     }
     
     func configureViewControllers() {
-        let homeVC  = HomeVC()
+        let homeVC  = HomeViewController()
         let homeNav = templateNavigationController(image: UIImage(systemName: "house")!, rootViewController: homeVC)
         
         let instructionsVC = InstructionsVC()

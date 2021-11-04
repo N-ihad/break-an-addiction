@@ -9,53 +9,39 @@ import UIKit
 
 private let streaks = [20, 24, 14, 22, 27]
 
-class StreaksView: UIView {
+final class StreaksView: UIView {
     
-    // MARK: - Properties
-    
-    private let streaksLabel: UILabel = {
-        let label = Utilities().label(text: "Streaks")
-        
-        return label
-    }()
+    private let streaksLabel = Utilities().label(text: "Streaks")
     
     private let verticalStreakBarViews: [StreakBarView] = {
         var views = [StreakBarView]()
         let max = Float(streaks.max()!)
-        for streak in streaks {
+
+        streaks.forEach { streak in
             let view = StreakBarView()
-            let multiplier = CGFloat(Float(streak)/max)
+            let multiplier = CGFloat(Float(streak) / max)
             let maxHeight: CGFloat = 126
             view.barView.setDimensions(width: 36, height: CGFloat(maxHeight) * multiplier)
             view.counterLabel.text = String(streak)
             views.append(view)
         }
 
-        
         return views
     }()
     
-    private let streakCounterLabel: UILabel = {
-        let label = Utilities().label(text: "")
-        
-        return label
-    }()
-    
-    // MARK: - Lifecycle
-    
+    private let streakCounterLabel = Utilities().label(text: "")
+
     override init(frame: CGRect = CGRect(x: 0, y: 0, width: 263, height: 182)) {
         super.init(frame: frame)
         
-        configureSubviews()
+        layout()
     }
     
     required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+        fatalError("init(coder:) has not been implemented. No storyboards")
     }
-    
-    // MARK: - Helpers
-    
-    func configureSubviews() {
+
+    private func layout() {
         let stack = UIStackView(arrangedSubviews: verticalStreakBarViews)
         addSubview(stack)
         stack.setDimensions(width: 263, height: 158)
@@ -63,7 +49,7 @@ class StreaksView: UIView {
         stack.spacing = 20
         stack.distribution = .fillEqually
         stack.centerX(inView: self)
-        stack.anchor(bottom: self.bottomAnchor, paddingBottom: 0)
+        stack.anchor(bottom: bottomAnchor, paddingBottom: 0)
         
         addSubview(streaksLabel)
         streaksLabel.centerX(inView: self)
@@ -71,37 +57,32 @@ class StreaksView: UIView {
     }
 }
 
-fileprivate class StreakBarView: UIView {
+private class StreakBarView: UIView {
     
-    let barView: UIView = {
-        let view = UIView(frame: CGRect(x: 0, y: 0, width: 36, height: 60))
-        view.layer.cornerRadius = 8
-        view.backgroundColor = .green
+    fileprivate let barView: UIView = {
+        let barView = UIView(frame: CGRect(x: 0, y: 0, width: 36, height: 60))
+        barView.layer.cornerRadius = 8
+        barView.backgroundColor = .green
 //        view.setDimensions(width: 36, height: 60)
-        
-        return view
+        return barView
     }()
     
-    let counterLabel: UILabel = {
-        let label = Utilities().label(text: "24")
-        
-        return label
-    }()
+    fileprivate let counterLabel = Utilities().label(text: "24")
     
     override init(frame: CGRect = CGRect(x: 0, y: 0, width: 36, height: 160)) {
         super.init(frame: frame)
         
-        configureSubviews()
+        layout()
     }
     
     required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+        fatalError("init(coder:) has not been implemented. No storyboards")
     }
     
-    func configureSubviews() {
+    private func layout() {
         addSubview(counterLabel)
         counterLabel.centerX(inView: self)
-        counterLabel.anchor(bottom: self.bottomAnchor, paddingBottom: 0)
+        counterLabel.anchor(bottom: bottomAnchor, paddingBottom: 0)
         
         addSubview(barView)
         barView.centerX(inView: self)

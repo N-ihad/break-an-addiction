@@ -171,6 +171,34 @@
 			path = Resources;
 			sourceTree = "<group>";
 		};
+		208D21182733FC3D00C4414E /* Home */ = {
+			isa = PBXGroup;
+			children = (
+				20F9C010258BFCF300EB7F38 /* AbstainingCounterView.swift */,
+			);
+			path = Home;
+			sourceTree = "<group>";
+		};
+		208D21192733FC5300C4414E /* Instructions */ = {
+			isa = PBXGroup;
+			children = (
+				20F9BFEC25878D8500EB7F38 /* InstructionLabel.swift */,
+				20F9BFE92587831200EB7F38 /* InstructionTableViewCell.swift */,
+			);
+			path = Instructions;
+			sourceTree = "<group>";
+		};
+		208D211A2733FC7B00C4414E /* Statistics */ = {
+			isa = PBXGroup;
+			children = (
+				20F9BFEF2587B06300EB7F38 /* DataFilterView.swift */,
+				20F9BFF22587B2DB00EB7F38 /* DataFilterCell.swift */,
+				20F9BFF52587C06A00EB7F38 /* RelapseTableViewCell.swift */,
+				20F9BFF82587C07500EB7F38 /* TriggerTableViewCell.swift */,
+			);
+			path = Statistics;
+			sourceTree = "<group>";
+		};
 		20BEA6952584118100F7AAB2 = {
 			isa = PBXGroup;
 			children = (
@@ -238,13 +266,9 @@
 			isa = PBXGroup;
 			children = (
 				20BEA6D4258419EA00F7AAB2 /* TextField.swift */,
-				20F9BFEC25878D8500EB7F38 /* InstructionLabel.swift */,
-				20F9BFEF2587B06300EB7F38 /* DataFilterView.swift */,
-				20F9BFF22587B2DB00EB7F38 /* DataFilterCell.swift */,
-				20F9BFE92587831200EB7F38 /* InstructionTableViewCell.swift */,
-				20F9BFF52587C06A00EB7F38 /* RelapseTableViewCell.swift */,
-				20F9BFF82587C07500EB7F38 /* TriggerTableViewCell.swift */,
-				20F9C010258BFCF300EB7F38 /* AbstainingCounterView.swift */,
+				208D21182733FC3D00C4414E /* Home */,
+				208D21192733FC5300C4414E /* Instructions */,
+				208D211A2733FC7B00C4414E /* Statistics */,
 				208D21032733D74500C4414E /* Tags */,
 				208D21002733D6D500C4414E /* Streaks */,
 			);

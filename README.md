@@ -1,6 +1,6 @@
 # Break Addiction
 
-An iOS app to help people with battling the addiction. Main key is to identify triggers which often lead you to relapse and make them invisible / avoid them OR develop strategies to react to them. Trigger > Reaction > Action
+An iOS app to help people battling the addiction. Main key is to identify triggers which often lead you to relapse and make them invisible / avoid them OR develop strategies to react to them. Trigger > Reaction > Action
 
 ![](https://sun9-9.userapi.com/impg/Nq_aJHCSQ44c1hQblI-l7otX95SY4L2ckHIhrQ/aFFkcGkEUSo.jpg?size=2560x1601&quality=96&proxy=1&sign=8bff6da715e48caa6d35592661eafafa&type=album)
 

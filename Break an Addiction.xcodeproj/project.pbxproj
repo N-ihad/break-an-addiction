@@ -37,7 +37,7 @@
 		20F9BFD7258739E000EB7F38 /* TagsCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20F9BFD6258739E000EB7F38 /* TagsCollectionViewCell.swift */; };
 		20F9BFDF2587653F00EB7F38 /* TabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20F9BFDE2587653F00EB7F38 /* TabBarController.swift */; };
 		20F9BFE725877C0500EB7F38 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20F9BFE625877C0500EB7F38 /* SettingsViewController.swift */; };
-		20F9BFEA2587831200EB7F38 /* InstructionTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20F9BFE92587831200EB7F38 /* InstructionTableViewCell.swift */; };
+		20F9BFEA2587831200EB7F38 /* InstructionsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20F9BFE92587831200EB7F38 /* InstructionsTableViewCell.swift */; };
 		20F9BFED25878D8500EB7F38 /* InstructionLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20F9BFEC25878D8500EB7F38 /* InstructionLabel.swift */; };
 		20F9BFF02587B06300EB7F38 /* DataFilterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20F9BFEF2587B06300EB7F38 /* DataFilterView.swift */; };
 		20F9BFF32587B2DB00EB7F38 /* DataFilterCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20F9BFF22587B2DB00EB7F38 /* DataFilterCell.swift */; };
@@ -89,7 +89,7 @@
 		20F9BFD6258739E000EB7F38 /* TagsCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagsCollectionViewCell.swift; sourceTree = "<group>"; };
 		20F9BFDE2587653F00EB7F38 /* TabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarController.swift; sourceTree = "<group>"; };
 		20F9BFE625877C0500EB7F38 /* SettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
-		20F9BFE92587831200EB7F38 /* InstructionTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InstructionTableViewCell.swift; sourceTree = "<group>"; };
+		20F9BFE92587831200EB7F38 /* InstructionsTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InstructionsTableViewCell.swift; sourceTree = "<group>"; };
 		20F9BFEC25878D8500EB7F38 /* InstructionLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InstructionLabel.swift; sourceTree = "<group>"; };
 		20F9BFEF2587B06300EB7F38 /* DataFilterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataFilterView.swift; sourceTree = "<group>"; };
 		20F9BFF22587B2DB00EB7F38 /* DataFilterCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataFilterCell.swift; sourceTree = "<group>"; };
@@ -119,6 +119,68 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		2047B09F2736EE5300B3181A /* Application */ = {
+			isa = PBXGroup;
+			children = (
+				20BEA6A12584118100F7AAB2 /* AppDelegate.swift */,
+				20BEA6A32584118100F7AAB2 /* SceneDelegate.swift */,
+			);
+			path = Application;
+			sourceTree = "<group>";
+		};
+		2047B0A02736EE7700B3181A /* Modules */ = {
+			isa = PBXGroup;
+			children = (
+				20BEA6C32584126E00F7AAB2 /* Intro */,
+				20BEA6C42584127400F7AAB2 /* Home */,
+				20BEA6C52584127F00F7AAB2 /* Instructions */,
+				20BEA6C62584128600F7AAB2 /* Statistics */,
+			);
+			path = Modules;
+			sourceTree = "<group>";
+		};
+		2047B0A22736EEC300B3181A /* UI */ = {
+			isa = PBXGroup;
+			children = (
+				20F9BFD6258739E000EB7F38 /* TagsCollectionViewCell.swift */,
+				20BEA6D4258419EA00F7AAB2 /* TextField.swift */,
+				20F9BFD2258737A200EB7F38 /* TagsView.swift */,
+			);
+			path = UI;
+			sourceTree = "<group>";
+		};
+		2047B0A32736EF0200B3181A /* View */ = {
+			isa = PBXGroup;
+			children = (
+				20F9C013258C017300EB7F38 /* StreaksView.swift */,
+				208D21012733D6F300C4414E /* StreakBarView.swift */,
+				20F9BFEF2587B06300EB7F38 /* DataFilterView.swift */,
+				20F9BFF22587B2DB00EB7F38 /* DataFilterCell.swift */,
+				20F9BFF52587C06A00EB7F38 /* RelapseTableViewCell.swift */,
+				20F9BFF82587C07500EB7F38 /* TriggerTableViewCell.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		2047B0A42736EF0B00B3181A /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				20BEA6CB258412A900F7AAB2 /* StatisticsViewController.swift */,
+				20F9BFFB258802F600EB7F38 /* RelapseDetailsViewController.swift */,
+				20F9BFFE2588030100EB7F38 /* TriggerDetailsViewController.swift */,
+			);
+			path = Controller;
+			sourceTree = "<group>";
+		};
+		2047B0A52736EF5800B3181A /* View */ = {
+			isa = PBXGroup;
+			children = (
+				20F9BFEC25878D8500EB7F38 /* InstructionLabel.swift */,
+				20F9BFE92587831200EB7F38 /* InstructionsTableViewCell.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
 		208D20F92733563200C4414E /* Constants */ = {
 			isa = PBXGroup;
 			children = (
@@ -129,33 +191,14 @@
 			path = Constants;
 			sourceTree = "<group>";
 		};
-		208D21002733D6D500C4414E /* Streaks */ = {
-			isa = PBXGroup;
-			children = (
-				20F9C013258C017300EB7F38 /* StreaksView.swift */,
-				208D21012733D6F300C4414E /* StreakBarView.swift */,
-			);
-			path = Streaks;
-			sourceTree = "<group>";
-		};
-		208D21032733D74500C4414E /* Tags */ = {
-			isa = PBXGroup;
-			children = (
-				20F9BFD2258737A200EB7F38 /* TagsView.swift */,
-				20F9BFD6258739E000EB7F38 /* TagsCollectionViewCell.swift */,
-			);
-			path = Tags;
-			sourceTree = "<group>";
-		};
 		208D21152733FB4B00C4414E /* src */ = {
 			isa = PBXGroup;
 			children = (
-				20BEA6A12584118100F7AAB2 /* AppDelegate.swift */,
-				20BEA6A32584118100F7AAB2 /* SceneDelegate.swift */,
-				20BEA6BF2584121000F7AAB2 /* Model */,
-				20BEA6BE2584120D00F7AAB2 /* View */,
-				20BEA6BD2584120A00F7AAB2 /* Controller */,
+				20F9BFDE2587653F00EB7F38 /* TabBarController.swift */,
+				2047B09F2736EE5300B3181A /* Application */,
 				208D20F92733563200C4414E /* Constants */,
+				20BEA6BF2584121000F7AAB2 /* Entities */,
+				2047B0A02736EE7700B3181A /* Modules */,
 				20BEA6BC2584120800F7AAB2 /* Service */,
 				20BEA6BB2584120600F7AAB2 /* Utils */,
 			);
@@ -169,34 +212,6 @@
 				20BEA6AF2584118400F7AAB2 /* LaunchScreen.storyboard */,
 			);
 			path = Resources;
-			sourceTree = "<group>";
-		};
-		208D21182733FC3D00C4414E /* Home */ = {
-			isa = PBXGroup;
-			children = (
-				20F9C010258BFCF300EB7F38 /* AbstainingCounterView.swift */,
-			);
-			path = Home;
-			sourceTree = "<group>";
-		};
-		208D21192733FC5300C4414E /* Instructions */ = {
-			isa = PBXGroup;
-			children = (
-				20F9BFEC25878D8500EB7F38 /* InstructionLabel.swift */,
-				20F9BFE92587831200EB7F38 /* InstructionTableViewCell.swift */,
-			);
-			path = Instructions;
-			sourceTree = "<group>";
-		};
-		208D211A2733FC7B00C4414E /* Statistics */ = {
-			isa = PBXGroup;
-			children = (
-				20F9BFEF2587B06300EB7F38 /* DataFilterView.swift */,
-				20F9BFF22587B2DB00EB7F38 /* DataFilterCell.swift */,
-				20F9BFF52587C06A00EB7F38 /* RelapseTableViewCell.swift */,
-				20F9BFF82587C07500EB7F38 /* TriggerTableViewCell.swift */,
-			);
-			path = Statistics;
 			sourceTree = "<group>";
 		};
 		20BEA6952584118100F7AAB2 = {
@@ -229,6 +244,7 @@
 		20BEA6BB2584120600F7AAB2 /* Utils */ = {
 			isa = PBXGroup;
 			children = (
+				2047B0A22736EEC300B3181A /* UI */,
 				20F9BFC32584CC5000EB7F38 /* Helper.swift */,
 				20BEA6D1258413DE00F7AAB2 /* UIView+AutoLayout.swift */,
 				208D20FC273356B800C4414E /* UIColor+RGB.swift */,
@@ -250,32 +266,7 @@
 			path = Service;
 			sourceTree = "<group>";
 		};
-		20BEA6BD2584120A00F7AAB2 /* Controller */ = {
-			isa = PBXGroup;
-			children = (
-				20F9BFDE2587653F00EB7F38 /* TabBarController.swift */,
-				20BEA6C32584126E00F7AAB2 /* Intro */,
-				20BEA6C42584127400F7AAB2 /* Home */,
-				20BEA6C52584127F00F7AAB2 /* Instructions */,
-				20BEA6C62584128600F7AAB2 /* Statistics */,
-			);
-			path = Controller;
-			sourceTree = "<group>";
-		};
-		20BEA6BE2584120D00F7AAB2 /* View */ = {
-			isa = PBXGroup;
-			children = (
-				20BEA6D4258419EA00F7AAB2 /* TextField.swift */,
-				208D21182733FC3D00C4414E /* Home */,
-				208D21192733FC5300C4414E /* Instructions */,
-				208D211A2733FC7B00C4414E /* Statistics */,
-				208D21032733D74500C4414E /* Tags */,
-				208D21002733D6D500C4414E /* Streaks */,
-			);
-			path = View;
-			sourceTree = "<group>";
-		};
-		20BEA6BF2584121000F7AAB2 /* Model */ = {
+		20BEA6BF2584121000F7AAB2 /* Entities */ = {
 			isa = PBXGroup;
 			children = (
 				20F9C016258C226400EB7F38 /* Addiction.swift */,
@@ -283,7 +274,7 @@
 				20F9C01C258C276500EB7F38 /* Trigger.swift */,
 				20F9C022258CACA900EB7F38 /* Reaction.swift */,
 			);
-			path = Model;
+			path = Entities;
 			sourceTree = "<group>";
 		};
 		20BEA6C32584126E00F7AAB2 /* Intro */ = {
@@ -300,6 +291,7 @@
 		20BEA6C42584127400F7AAB2 /* Home */ = {
 			isa = PBXGroup;
 			children = (
+				20F9C010258BFCF300EB7F38 /* AbstainingCounterView.swift */,
 				20BEA6C02584124600F7AAB2 /* HomeViewController.swift */,
 				20F9C00625894A7100EB7F38 /* RelapseViewController.swift */,
 				20F9BFE625877C0500EB7F38 /* SettingsViewController.swift */,
@@ -310,6 +302,7 @@
 		20BEA6C52584127F00F7AAB2 /* Instructions */ = {
 			isa = PBXGroup;
 			children = (
+				2047B0A52736EF5800B3181A /* View */,
 				20BEA6C72584129E00F7AAB2 /* InstructionsViewController.swift */,
 				20F9C0092589811300EB7F38 /* InstructionDetailsViewController.swift */,
 			);
@@ -319,9 +312,8 @@
 		20BEA6C62584128600F7AAB2 /* Statistics */ = {
 			isa = PBXGroup;
 			children = (
-				20BEA6CB258412A900F7AAB2 /* StatisticsViewController.swift */,
-				20F9BFFB258802F600EB7F38 /* RelapseDetailsViewController.swift */,
-				20F9BFFE2588030100EB7F38 /* TriggerDetailsViewController.swift */,
+				2047B0A32736EF0200B3181A /* View */,
+				2047B0A42736EF0B00B3181A /* Controller */,
 			);
 			path = Statistics;
 			sourceTree = "<group>";
@@ -417,7 +409,7 @@
 				208D21112733F8D800C4414E /* UIButton+Image.swift in Sources */,
 				20BEA6D2258413DE00F7AAB2 /* UIView+AutoLayout.swift in Sources */,
 				20F9BFF32587B2DB00EB7F38 /* DataFilterCell.swift in Sources */,
-				20F9BFEA2587831200EB7F38 /* InstructionTableViewCell.swift in Sources */,
+				20F9BFEA2587831200EB7F38 /* InstructionsTableViewCell.swift in Sources */,
 				20BEA6DD2584A98700F7AAB2 /* SecondPageViewController.swift in Sources */,
 				20F9C011258BFCF300EB7F38 /* AbstainingCounterView.swift in Sources */,
 				20BEA6C12584124600F7AAB2 /* HomeViewController.swift in Sources */,

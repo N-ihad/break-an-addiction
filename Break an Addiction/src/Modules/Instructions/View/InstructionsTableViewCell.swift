@@ -7,7 +7,7 @@
 
 import UIKit
 
-final class InstructionTableViewCell: UITableViewCell {
+final class InstructionsTableViewCell: UITableViewCell {
 
     private let triggerLabel = InstructionLabel()
     private let arrowView = UIView()

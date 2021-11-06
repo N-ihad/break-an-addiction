@@ -33,7 +33,7 @@ final class InstructionsViewController: UIViewController {
 
         tableView.delegate = self
         tableView.dataSource = self
-        tableView.register(InstructionTableViewCell.self, forCellReuseIdentifier: reuseIdentifier)
+        tableView.register(InstructionsTableViewCell.self, forCellReuseIdentifier: reuseIdentifier)
     }
 
     private func layout() {
@@ -81,7 +81,7 @@ extension InstructionsViewController: UITableViewDelegate, UITableViewDataSource
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: reuseIdentifier) as! InstructionTableViewCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: reuseIdentifier) as! InstructionsTableViewCell
         let trigger = AddictionManager.shared.instructionTriggers[indexPath.row]
         cell.set(with: trigger.name, trigger.reaction!.name)
         

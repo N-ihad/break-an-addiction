@@ -11,7 +11,7 @@ private let streaks = [20, 24, 14, 22, 27]
 
 final class StreaksView: UIView {
     
-    private let streaksLabel = Helper().label(text: "Streaks")
+    private let streaksLabel = Helper.makeLabel(text: "Streaks")
     
     private let verticalStreakBarViews: [StreakBarView] = {
         var views = [StreakBarView]()
@@ -29,7 +29,7 @@ final class StreaksView: UIView {
         return views
     }()
     
-    private let streakCounterLabel = Helper().label(text: "")
+    private let streakCounterLabel = Helper.makeLabel(text: "")
 
     override init(frame: CGRect = CGRect(x: 0, y: 0, width: 263, height: 182)) {
         super.init(frame: frame)

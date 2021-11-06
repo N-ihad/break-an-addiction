@@ -7,7 +7,8 @@
 
 import Foundation
 
-class Addiction {
+final class Addiction {
+
     var name: String
     var triggers: [Trigger]
     var relapses: [Relapse]
@@ -22,7 +23,13 @@ class Addiction {
         self.instructions = [:]
     }
     
-    init(name: String, triggers: [Trigger]?, relapses: [Relapse]?, reactions: [Reaction]?, instructions: [Trigger : Reaction]?) {
+    init(
+        name: String,
+        triggers: [Trigger]?,
+        relapses: [Relapse]?,
+        reactions: [Reaction]?,
+        instructions: [Trigger : Reaction]?
+    ) {
         self.name = name
         self.triggers = []
         self.relapses = []

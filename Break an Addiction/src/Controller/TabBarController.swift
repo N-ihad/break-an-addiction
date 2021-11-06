@@ -1,5 +1,5 @@
 //
-//  MainTabController.swift
+//  TabBarController.swift
 //  Break an Addiction
 //
 //  Created by Nihad on 12/14/20.
@@ -7,7 +7,7 @@
 
 import UIKit
 
-final class MainTabController: UITabBarController {
+final class TabBarController: UITabBarController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -20,16 +20,19 @@ final class MainTabController: UITabBarController {
         tabBar.backgroundColor = .white
         tabBar.tintColor = .black
 
-        let homeNavigationController = templateNavigationController(
-            image: .iconHomeTabBar, rootViewController: HomeViewController()
+        let homeNavigationController = Helper.makeNavigationController(
+            image: .iconHomeTabBar,
+            rootViewController: HomeViewController()
         )
 
-        let instructionsNavigationController = templateNavigationController(
-            image: .iconInstructionsTabBar, rootViewController: InstructionsViewController()
+        let instructionsNavigationController = Helper.makeNavigationController(
+            image: .iconInstructionsTabBar,
+            rootViewController: InstructionsViewController()
         )
 
-        let statisticsNavigationController = templateNavigationController(
-            image: .iconStatisticsTabBar, rootViewController: StatisticsViewController()
+        let statisticsNavigationController = Helper.makeNavigationController(
+            image: .iconStatisticsTabBar,
+            rootViewController: StatisticsViewController()
         )
 
         viewControllers = [
@@ -48,16 +51,5 @@ final class MainTabController: UITabBarController {
         UINavigationBar.appearance().prefersLargeTitles = true
         UINavigationBar.appearance().barStyle = .black
         UINavigationBar.appearance().tintColor = .white
-//        navigationController?.view.backgroundColor = .clear
-    }
-    
-    private func templateNavigationController(
-        image: UIImage,
-        rootViewController: UIViewController
-    ) -> UINavigationController {
-        let navigationController = UINavigationController(rootViewController: rootViewController)
-        navigationController.tabBarItem.image = image
-        navigationController.navigationBar.barTintColor = .white
-        return navigationController
     }
 }

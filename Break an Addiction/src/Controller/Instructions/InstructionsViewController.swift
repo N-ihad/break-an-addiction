@@ -54,15 +54,15 @@ final class InstructionsViewController: UIViewController {
     }
 
     @objc private func onAddNewInstruction() {
-        let alertController = Helper().alertWithTextfields(
+        let alertController = Helper.makeAlertWithTextfields(
             caption: "Add new instruction",
             placeholders: [.trigger, .relapse]
         ) { [weak self] values in
 
             do {
-                try AddictionService.shared.addInstruction(triggerName: values[0], reactionName: values[1])
+                try AddictionManager.shared.addInstruction(triggerName: values[0], reactionName: values[1])
             } catch let error {
-                let alert = Helper().alertError(message: error.localizedDescription)
+                let alert = Helper.makeErrorAlertController(message: error.localizedDescription)
                 self?.present(alert, animated: true)
             }
 
@@ -77,12 +77,12 @@ final class InstructionsViewController: UIViewController {
 extension InstructionsViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return AddictionService.shared.instructions.count
+        return AddictionManager.shared.instructions.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: reuseIdentifier) as! InstructionTableViewCell
-        let trigger = AddictionService.shared.instructionTriggers[indexPath.row]
+        let trigger = AddictionManager.shared.instructionTriggers[indexPath.row]
         cell.set(with: trigger.name, trigger.reaction!.name)
         
         return cell
@@ -94,7 +94,7 @@ extension InstructionsViewController: UITableViewDelegate, UITableViewDataSource
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        let reactionName = AddictionService.shared.instructionTriggers[indexPath.row].reaction!.name
+        let reactionName = AddictionManager.shared.instructionTriggers[indexPath.row].reaction!.name
         return reactionName.height(withConstrainedWidth: (tableView.frame.width/2)-20, font: .boldSystemFont(ofSize: 17)) + 40
     }
 

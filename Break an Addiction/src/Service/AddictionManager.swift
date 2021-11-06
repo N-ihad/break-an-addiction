@@ -1,5 +1,5 @@
 //
-//  AddictionService.swift
+//  AddictionManager.swift
 //  Break an Addiction
 //
 //  Created by Nihad on 12/18/20.
@@ -7,9 +7,9 @@
 
 import Foundation
 
-final class AddictionService {
+final class AddictionManager {
     
-    static let shared = AddictionService()
+    static let shared = AddictionManager()
 
     private let addiction: Addiction!
 
@@ -61,14 +61,14 @@ final class AddictionService {
     private init() {
         addiction = Addiction(
             name: "",
-            triggers: AddictionService.triggers,
-            relapses: AddictionService.relapses,
-            reactions: AddictionService.reactions,
+            triggers: AddictionManager.triggers,
+            relapses: AddictionManager.relapses,
+            reactions: AddictionManager.reactions,
             instructions: nil
         )
     }
 
-    // MARK: - POST
+    // MARK: - CREATE
     @discardableResult
     func addTrigger(name: String) throws -> Trigger {
         guard !triggers.contains(where: { $0.name == name }) else {
@@ -116,7 +116,7 @@ final class AddictionService {
         addiction.relapses.append(Relapse(date: date, instruction: instruction, trigger: trigger))
     }
     
-    // MARK: - GET
+    // MARK: - READ
     func trigger(at index: Int) throws -> Trigger {
         guard index >= 0 && index < addiction.triggers.count else {
             throw TriggerValidation.triggerAtSuchIndexDoesNotExist
@@ -141,7 +141,7 @@ final class AddictionService {
         return addiction.instructions[trigger]!
     }
 
-    // MARK: - PUT
+    // MARK: - UPDATE
     func setAddictionName(name: String) {
         addiction.name = name
     }
@@ -151,7 +151,7 @@ final class AddictionService {
 }
 
 // MARK: - Mock data
-extension AddictionService {
+extension AddictionManager {
     fileprivate static let triggers = [
         Trigger(name: "saw alcohol in the store"),
         Trigger(name: "argument with wife"),

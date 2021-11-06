@@ -11,7 +11,7 @@ protocol LocalizedDescriptionError: Error {
     var localizedDescription: String { get }
 }
 
-extension AddictionService {
+extension AddictionManager {
     enum TriggerValidation: LocalizedDescriptionError {
 
         case triggerWithSuchNameExists

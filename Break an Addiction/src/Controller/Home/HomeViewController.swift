@@ -10,7 +10,7 @@ import UIKit
 final class HomeViewController: UIViewController {
 
     private let addictionNameLabel: UILabel = {
-        let label = Helper().label(text: "")
+        let label = Helper.makeLabel(text: "")
         label.font = .addictionName
         return label
     }()
@@ -31,7 +31,7 @@ final class HomeViewController: UIViewController {
     var counter: DateComponents {
         Calendar.current.dateComponents(
             [.year, .day, .hour, .minute, .second],
-            from: AddictionService.shared.lastRelapseDate ?? Date.yesterday, to: Date()
+            from: AddictionManager.shared.lastRelapseDate ?? Date.yesterday, to: Date()
         )
     }
 
@@ -45,7 +45,7 @@ final class HomeViewController: UIViewController {
     }
 
     private func setup() {
-        addictionNameLabel.text = AddictionService.shared.addictionName
+        addictionNameLabel.text = AddictionManager.shared.addictionName
 
         let button = UIButton()
         button.setImage(size: 18, imgName: "gear")

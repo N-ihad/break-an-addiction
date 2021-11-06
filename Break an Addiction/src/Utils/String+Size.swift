@@ -1,5 +1,5 @@
 //
-//  String.swift
+//  String+Size.swift
 //  Break an Addiction
 //
 //  Created by Nihad on 11/4/21.

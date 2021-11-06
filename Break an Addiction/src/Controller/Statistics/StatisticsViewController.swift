@@ -145,21 +145,21 @@ extension StatisticsViewController: DataFilterViewDelegate {
 extension StatisticsViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if tableView == relapsesTableView {
-            return AddictionService.shared.relapses.count
+            return AddictionManager.shared.relapses.count
         } else {
-            return AddictionService.shared.occurredTriggers.count
+            return AddictionManager.shared.occurredTriggers.count
         }
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if tableView == relapsesTableView {
             let cell = tableView.dequeueReusableCell(withIdentifier: reuseIdentifierRelapse) as! RelapseTableViewCell
-            cell.set(with: AddictionService.shared.relapses[indexPath.row])
+            cell.set(with: AddictionManager.shared.relapses[indexPath.row])
             cell.delegate = self
             return cell
         } else {
             let cell = tableView.dequeueReusableCell(withIdentifier: reuseIdentifierTrigger) as! TriggerTableViewCell
-            cell.set(with: AddictionService.shared.occurredTriggers[indexPath.row])
+            cell.set(with: AddictionManager.shared.occurredTriggers[indexPath.row])
             cell.delegate = self
             return cell
         }
@@ -167,7 +167,7 @@ extension StatisticsViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         if tableView == triggersTableView {
-            let triggerName = AddictionService.shared.triggers[indexPath.row].name
+            let triggerName = AddictionManager.shared.triggers[indexPath.row].name
             return triggerName.height(withConstrainedWidth: (tableView.frame.width/2)-20, font: .boldSystemFont(ofSize: 17)) + 40
         }
         return 60

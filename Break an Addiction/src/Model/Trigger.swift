@@ -7,13 +7,14 @@
 
 import Foundation
 
-class Trigger {
+final class Trigger {
 
     var name: String
-    weak var reaction: Reaction?
     var relapses: [Relapse]
     var count: UInt
-    
+
+    weak var reaction: Reaction?
+
     init(name: String) {
         self.name = name
         reaction = nil

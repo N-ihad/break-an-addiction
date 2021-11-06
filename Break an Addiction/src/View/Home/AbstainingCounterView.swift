@@ -10,12 +10,12 @@ import UIKit
 final class AbstainingCounterView: UIView {
 
     private let counterLabel: UILabel = {
-        let counterLabel = Helper().label(text: "")
+        let counterLabel = Helper.makeLabel(text: "")
         counterLabel.font = .abstainingCounter
         return counterLabel
     }()
     
-    private let displayFormatLabel = Helper().label(text: "days:hours:mins:secs")
+    private let displayFormatLabel = Helper.makeLabel(text: "days:hours:mins:secs")
 
     override init(frame: CGRect) {
         super.init(frame: frame)

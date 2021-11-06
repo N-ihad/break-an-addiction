@@ -1,5 +1,5 @@
 //
-//  UIColor+BA.swift
+//  UIColor+RGB.swift
 //  Break an Addiction
 //
 //  Created by Nihad on 11/4/21.

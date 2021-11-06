@@ -14,11 +14,10 @@ final class StreakBarView: UIView {
         let barView = UIView(frame: CGRect(x: 0, y: 0, width: 36, height: 60))
         barView.layer.cornerRadius = 8
         barView.backgroundColor = .green
-//        view.setDimensions(width: 36, height: 60)
         return barView
     }()
 
-    let counterLabel = Helper().label(text: "24")
+    let counterLabel = Helper.makeLabel(text: "24")
 
     override init(frame: CGRect = CGRect(x: 0, y: 0, width: 36, height: 160)) {
         super.init(frame: frame)

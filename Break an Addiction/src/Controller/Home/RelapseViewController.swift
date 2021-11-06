@@ -33,10 +33,10 @@ final class RelapseViewController: UIViewController {
     }()
     
     private let triggersTagView = TagsView()
-    private let triggersTagViewCaptionLabel = Helper().labelCaption(text: .trigger, highlightAndUnderlineSubstring: "trigger")
+    private let triggersTagViewCaptionLabel = Helper.makeLabelCaption(text: .trigger, highlightAndUnderlineSubstring: "trigger")
     
     private let reactionsTagView = TagsView()
-    private let reactionsTagViewCaptionLabel = Helper().labelCaption(text: .solution)
+    private let reactionsTagViewCaptionLabel = Helper.makeLabelCaption(text: .solution)
 
     private var relapseDate: Date = Date()
     private var trigger: Trigger?
@@ -103,7 +103,7 @@ final class RelapseViewController: UIViewController {
 
     @objc private func onReset() {
         trigger?.count += 1
-        AddictionService.shared.addRelapse(date: relapseDate, instruction: nil, trigger: trigger)
+        AddictionManager.shared.addRelapse(date: relapseDate, instruction: nil, trigger: trigger)
         dismiss(animated: true, completion: nil)
     }
 }
@@ -112,9 +112,9 @@ final class RelapseViewController: UIViewController {
 extension RelapseViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         if collectionView == triggersTagView.collectionView {
-            return AddictionService.shared.triggers.count
+            return AddictionManager.shared.triggers.count
         } else {
-            return AddictionService.shared.reactions.count
+            return AddictionManager.shared.reactions.count
         }
     }
 
@@ -123,7 +123,7 @@ extension RelapseViewController: UICollectionViewDataSource {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: triggerReuseIdentifier, for: indexPath) as! TagsCollectionViewCell
             cell.delegate = self
             do {
-                cell.textLabel.text = try AddictionService.shared.trigger(at: indexPath.row).name
+                cell.textLabel.text = try AddictionManager.shared.trigger(at: indexPath.row).name
             } catch let error {
                 print(error.localizedDescription)
             }
@@ -132,7 +132,7 @@ extension RelapseViewController: UICollectionViewDataSource {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reactionReuseIdentifier, for: indexPath) as! TagsCollectionViewCell
             cell.delegate = self
             do {
-                cell.textLabel.text = try AddictionService.shared.reaction(at: indexPath.row).name
+                cell.textLabel.text = try AddictionManager.shared.reaction(at: indexPath.row).name
             } catch let error {
                 print(error.localizedDescription)
             }
@@ -145,7 +145,7 @@ extension RelapseViewController: UICollectionViewDataSource {
 extension RelapseViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         do {
-            let text = try AddictionService.shared.trigger(at: indexPath.row).name
+            let text = try AddictionManager.shared.trigger(at: indexPath.row).name
             return collectionView.cellSize(for: text)
         } catch let error {
             print(error.localizedDescription)
@@ -161,6 +161,6 @@ extension RelapseViewController: UICollectionViewDelegateFlowLayout {
 // MARK: - TagsCollectionViewCellDelegate
 extension RelapseViewController: TagsCollectionViewCellDelegate {
     func tagsCollectionViewCellDidReceiveTap(_ cell: TagsCollectionViewCell) {
-        trigger = AddictionService.shared.trigger(with: cell.textLabel.text!)
+        trigger = AddictionManager.shared.trigger(with: cell.textLabel.text!)
     }
 }

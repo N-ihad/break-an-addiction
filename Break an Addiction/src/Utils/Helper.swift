@@ -20,7 +20,7 @@ final class Helper {
         case motivationalQuote = "“The resistance that you fight physically in the gym and the resistance that you fight in life can only build a strong character.” Arnold Schwarzenegger"
     }
     
-    func button(text: String) -> UIButton {
+    static func makeButton(text: String) -> UIButton {
         let btn = UIButton()
         btn.setTitle(text, for: .normal)
         btn.layer.cornerRadius = 10
@@ -33,7 +33,7 @@ final class Helper {
         return btn
     }
     
-    func label(text: String) -> UILabel {
+    static func makeLabel(text: String) -> UILabel {
         let lbl = UILabel()
         lbl.textColor = .white
         lbl.font = UIFont.boldSystemFont(ofSize: 20)
@@ -45,7 +45,7 @@ final class Helper {
         return lbl
     }
     
-    func labelCaption(text: tagViewCaptionText, highlightAndUnderlineSubstring: String? = nil) -> UILabel {
+    static func makeLabelCaption(text: tagViewCaptionText, highlightAndUnderlineSubstring: String? = nil) -> UILabel {
         let lbl = UILabel()
         lbl.textColor = .white
         lbl.font = UIFont.boldSystemFont(ofSize: 20)
@@ -61,7 +61,7 @@ final class Helper {
         return lbl
     }
     
-    func labelInstruction(text: String) -> UILabel {
+    static func makeLabelInstruction(text: String) -> UILabel {
         let lbl = UILabel()
         lbl.preferredMaxLayoutWidth = (UIScreen.main.bounds.width / 2) - 20
         lbl.numberOfLines = 0
@@ -76,20 +76,25 @@ final class Helper {
         return lbl
     }
     
-    func alertWithTextfields(caption: String, placeholders: [textFieldPlaceholder], completion: @escaping ([String]) -> Void) -> UIAlertController {
+    static func makeAlertWithTextfields(caption: String,
+                                        placeholders: [textFieldPlaceholder],
+                                        completion: @escaping ([String]) -> Void) -> UIAlertController {
         let alertController = UIAlertController(title: caption, message: "", preferredStyle: .alert)
 
         placeholders.forEach { placeholder in
+
             alertController.addTextField { textField in
                 textField.placeholder = placeholder.rawValue
             }
         }
         
-        let saveAction = UIAlertAction(title: "Save", style: UIAlertAction.Style.default) { alert -> Void in
+        let saveAction = UIAlertAction(title: "Save", style: UIAlertAction.Style.default) { _ in
+
             var textFieldsValues = [String]()
             for i in 0..<placeholders.count {
                 textFieldsValues.append((alertController.textFields![i] as UITextField).text ?? "")
             }
+
             completion(textFieldsValues)
         }
 
@@ -101,10 +106,18 @@ final class Helper {
         return alertController
     }
     
-    func alertError(message: String) -> UIAlertController {
+    static func makeErrorAlertController(message: String) -> UIAlertController {
         let alert = UIAlertController(title: "Error", message: message, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "OK", style: .default))
         return alert
+    }
+
+    static func makeNavigationController(image: UIImage,
+                                         rootViewController: UIViewController) -> UINavigationController {
+        let navigationController = UINavigationController(rootViewController: rootViewController)
+        navigationController.tabBarItem.image = image
+        navigationController.navigationBar.barTintColor = .white
+        return navigationController
     }
 }
 

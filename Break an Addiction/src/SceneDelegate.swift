@@ -11,13 +11,15 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     var window: UIWindow?
 
-    func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
-        
-        guard let scene = (scene as? UIWindowScene) else { return }
+    func scene(_ scene: UIScene, willConnectTo session: UISceneSession,
+               options connectionOptions: UIScene.ConnectionOptions) {
+
+        guard let scene = (scene as? UIWindowScene) else {
+            return
+        }
         
         window = UIWindow(windowScene: scene)
         window?.rootViewController = RootIntroPageViewController()
-//        window?.rootViewController = MainTabController()
         window?.makeKeyAndVisible()
     }
 
@@ -25,4 +27,3 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         (UIApplication.shared.delegate as? AppDelegate)?.saveContext()
     }
 }
-

@@ -7,104 +7,100 @@
 
 import UIKit
 
-class RootIntroPageViewController: UIPageViewController {
-    
-    // MARK: - Properties
-    
-    lazy var pagesVCList: [UIViewController] = {
-        let firstPageVC = FirstPageViewController()
-        let secondPageVC = SecondPageViewController()
-        let thirdPageVC = ThirdPageViewController()
-        return [firstPageVC, secondPageVC, thirdPageVC]
+final class RootIntroPageViewController: UIPageViewController {
+
+    lazy var pageViewControllers: [UIViewController] = {
+        let firstPageViewController = FirstPageViewController()
+        let secondPageViewController = SecondPageViewController()
+        let thirdPageViewController = ThirdPageViewController()
+        return [firstPageViewController, secondPageViewController, thirdPageViewController]
     }()
-    
+
     override var preferredStatusBarStyle: UIStatusBarStyle {
-        return .lightContent
+        .lightContent
     }
-    
-    // MARK: - Lifecycle
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        configureDelegates()
-        configureUI()
+
+        setup()
+        style()
     }
 
-    override init(transitionStyle style: UIPageViewController.TransitionStyle, navigationOrientation: UIPageViewController.NavigationOrientation, options: [UIPageViewController.OptionsKey : Any]? = nil) {
+    override init(transitionStyle style: UIPageViewController.TransitionStyle,
+                  navigationOrientation: UIPageViewController.NavigationOrientation,
+                  options: [UIPageViewController.OptionsKey : Any]? = nil) {
         super.init(transitionStyle: .scroll, navigationOrientation: .horizontal, options: options)
+    }
+
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented. No storyboards")
     }
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        for subView in view.subviews {
-            if  subView is  UIPageControl {
-                subView.frame.origin.y = self.view.frame.size.height - 125
-            }
+        for subView in view.subviews where subView is UIPageControl {
+            subView.frame.origin.y = view.frame.size.height - 125
         }
     }
 
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
+    private func setup() {
+        dataSource = self
+        delegate = self
 
-    // MARK: - Selectors
-    
-    // MARK: - Helpers
-    func configureDelegates() {
-        self.dataSource = self
-        self.delegate = self
+        if let firstPageViewController = pageViewControllers.first {
+            setViewControllers([firstPageViewController], direction: .forward, animated: true)
+        }
     }
     
-    func configureUI() {
-        if let firstPageVC = pagesVCList.first {
-            self.setViewControllers([firstPageVC], direction: .forward, animated: true, completion: nil)
-        }
-        
+    private func style() {
         view.backgroundColor = .themeDarkGreen
     }
     
-    func goToNextPage(animated: Bool = true) {
-        guard let currentViewController = self.viewControllers?.first else { return }
-        guard let nextViewController = dataSource?.pageViewController(self, viewControllerAfter: currentViewController) else { return }
+    func presentNextPage(animated: Bool = true) {
+        guard let currentViewController = viewControllers?.first,
+              let nextViewController = dataSource?.pageViewController(self, viewControllerAfter: currentViewController) else {
+            return
+        }
         setViewControllers([nextViewController], direction: .forward, animated: animated, completion: nil)
     }
 
-    func goToPreviousPage(animated: Bool = true) {
-        guard let currentViewController = self.viewControllers?.first else { return }
-        guard let previousViewController = dataSource?.pageViewController(self, viewControllerBefore: currentViewController) else { return }
-        setViewControllers([previousViewController], direction: .reverse, animated: animated, completion: nil)
+    func presentPreviousPage(animated: Bool = true) {
+        guard let currentViewController = viewControllers?.first,
+              let previousViewController = dataSource?.pageViewController(self, viewControllerBefore: currentViewController) else {
+            return
+        }
+        setViewControllers([previousViewController], direction: .reverse, animated: animated)
     }
 }
 
-
-
+// MARK: - UIPageViewControllerDataSource, UIPageViewControllerDelegate
 extension RootIntroPageViewController: UIPageViewControllerDataSource, UIPageViewControllerDelegate {
-    
     func presentationCount(for pageViewController: UIPageViewController) -> Int {
-        return pagesVCList.count
+        return pageViewControllers.count
     }
-    
+
     func presentationIndex(for pageViewController: UIPageViewController) -> Int {
-        guard let currentVC = self.viewControllers?.first else {return 0}
-        let currentIndex = pagesVCList.firstIndex(of: currentVC)!
-        
+        guard let currentViewController = viewControllers?.first else {
+            return 0
+        }
+        let currentIndex = pageViewControllers.firstIndex(of: currentViewController)!
         return currentIndex
     }
     
     func pageViewController(_ pageViewController: UIPageViewController, viewControllerBefore viewController: UIViewController) -> UIViewController? {
-        guard let vcIndex = pagesVCList.firstIndex(of: viewController) else {return nil}
-        let previousIndex = vcIndex - 1
-        guard (0 ..< pagesVCList.count).contains(previousIndex) else {return nil}
-        
-        return pagesVCList[previousIndex]
+        guard let index = pageViewControllers.firstIndex(of: viewController),
+              (0..<pageViewControllers.count).contains(index - 1) else {
+            return nil
+        }
+        return pageViewControllers[index - 1]
     }
     
     func pageViewController(_ pageViewController: UIPageViewController, viewControllerAfter viewController: UIViewController) -> UIViewController? {
-        guard let vcIndex = pagesVCList.firstIndex(of: viewController) else {return nil}
-        let nextIndex = vcIndex + 1
-        guard pagesVCList.count > nextIndex else {return nil}
-        
-        return pagesVCList[nextIndex]
+        guard let index = pageViewControllers.firstIndex(of: viewController),
+              pageViewControllers.count > index + 1 else {
+            return nil
+        }
+        return pageViewControllers[index + 1]
     }
 }

@@ -7,20 +7,21 @@
 
 import Foundation
 
-class Relapse {
+final class Relapse {
+
     var date: Date
     var instruction: [String : String]?
     weak var trigger: Trigger?
-    
+
     init(date: Date) {
         self.date = date
     }
-    
+
     init(date: Date, instruction: [String : String]?) {
         self.date = date
         self.instruction = instruction
     }
-    
+
     init(date: Date, instruction: [String : String]?, trigger: Trigger?) {
         self.date = date
         self.instruction = instruction

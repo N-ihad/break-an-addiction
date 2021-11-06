@@ -11,7 +11,7 @@ final class ThirdPageViewController: UIViewController {
     
     private let reuseIdentifier = "TagCell"
 
-    private let solutionsTagCaptionLabel = Helper().labelCaption(text: .solution)
+    private let solutionsTagCaptionLabel = Helper.makeLabelCaption(text: .solution)
     private lazy var addReactionButton: UIButton = {
         let addReactionButton = UIButton()
         addReactionButton.setImage(size: 22, imgName: "plus")
@@ -21,7 +21,7 @@ final class ThirdPageViewController: UIViewController {
     }()
     private let reactionsTagsView = TagsView()
     private lazy var finishButton: UIButton = {
-        let finishButton = Helper().button(text: "Finish")
+        let finishButton = Helper.makeButton(text: "Finish")
         finishButton.addTarget(self, action: #selector(onFinish), for: .touchUpInside)
         return finishButton
     }()
@@ -56,11 +56,19 @@ final class ThirdPageViewController: UIViewController {
         stack.distribution = .equalCentering
 
         view.addSubview(stack)
-        view.addSubview(finishButton)
+        stack.anchor(
+            top: view.topAnchor,
+            left: view.leftAnchor,
+            right: view.rightAnchor,
+            paddingTop: 120,
+            paddingLeft: 32,
+            paddingRight: 32
+        )
+
         view.addSubview(addReactionButton)
-        
-        stack.anchor(top: view.topAnchor, left: view.leftAnchor, right: view.rightAnchor, paddingTop: 120, paddingLeft: 32, paddingRight: 32)
         addReactionButton.centerX(inView: view, topAnchor: stack.bottomAnchor, paddingTop: 20)
+
+        view.addSubview(finishButton)
         finishButton.centerX(inView: view, topAnchor: addReactionButton.bottomAnchor, paddingTop: 20)
     }
     
@@ -69,15 +77,15 @@ final class ThirdPageViewController: UIViewController {
     }
 
     @objc private func onAddReaction() {
-        let alertController = Helper().alertWithTextfields(
+        let alertController = Helper.makeAlertWithTextfields(
             caption: "Add new reaction",
             placeholders: [.relapse]
         ) { [weak self] values in
 
             do {
-                try AddictionService.shared.addReaction(name: values[0])
+                try AddictionManager.shared.addReaction(name: values[0])
             } catch let error {
-                let alert = Helper().alertError(message: error.localizedDescription)
+                let alert = Helper.makeErrorAlertController(message: error.localizedDescription)
                 self?.present(alert, animated: true)
             }
 
@@ -88,7 +96,7 @@ final class ThirdPageViewController: UIViewController {
     }
 
     @objc private func onFinish() {
-        let mainTabController = MainTabController()
+        let mainTabController = TabBarController()
         mainTabController.modalPresentationStyle = .fullScreen
         present(mainTabController, animated: true, completion: nil)
     }
@@ -97,14 +105,14 @@ final class ThirdPageViewController: UIViewController {
 // MARK: - UICollectionViewDataSource
 extension ThirdPageViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return AddictionService.shared.reactions.count
+        return AddictionManager.shared.reactions.count
     }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath) as! TagsCollectionViewCell
 
         do {
-            cell.textLabel.text = try AddictionService.shared.reaction(at: indexPath.row).name
+            cell.textLabel.text = try AddictionManager.shared.reaction(at: indexPath.row).name
         } catch let error {
             print(error.localizedDescription)
         }
@@ -115,13 +123,11 @@ extension ThirdPageViewController: UICollectionViewDataSource {
 
 // MARK: - UICollectionViewDelegateFlowLayout
 extension ThirdPageViewController: UICollectionViewDelegateFlowLayout {
-    func collectionView(
-        _ collectionView: UICollectionView,
-        layout collectionViewLayout: UICollectionViewLayout,
-        sizeForItemAt indexPath: IndexPath
-    ) -> CGSize {
+    func collectionView(_ collectionView: UICollectionView,
+                        layout collectionViewLayout: UICollectionViewLayout,
+                        sizeForItemAt indexPath: IndexPath) -> CGSize {
         do {
-            let reactionName = try AddictionService.shared.reaction(at: indexPath.row).name
+            let reactionName = try AddictionManager.shared.reaction(at: indexPath.row).name
             var reactionNameSize = reactionName.size(withAttributes: [
                 .font: UIFont.boldSystemFont(ofSize: 16)
             ])
@@ -138,11 +144,9 @@ extension ThirdPageViewController: UICollectionViewDelegateFlowLayout {
         return CGSize.zero
     }
     
-    func collectionView(
-        _ collectionView: UICollectionView,
-        layout collectionViewLayout: UICollectionViewLayout,
-        minimumInteritemSpacingForSectionAt section: Int
-    ) -> CGFloat {
+    func collectionView(_ collectionView: UICollectionView,
+                        layout collectionViewLayout: UICollectionViewLayout,
+                        minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
         return 5
     }
 }

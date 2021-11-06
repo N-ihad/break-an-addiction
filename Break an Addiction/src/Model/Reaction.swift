@@ -7,7 +7,8 @@
 
 import Foundation
 
-class Reaction {
+final class Reaction {
+
     var name: String
     
     init(name: String) {
